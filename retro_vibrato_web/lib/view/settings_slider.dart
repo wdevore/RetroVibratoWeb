@@ -35,7 +35,7 @@ class SettingsSlider extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 5,
+              flex: 4,
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.orange,
