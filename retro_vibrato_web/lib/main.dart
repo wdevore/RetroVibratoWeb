@@ -214,6 +214,22 @@ class FSfxrHomePage extends StatelessWidget {
               value: _settings.appSettings.autoplay,
               child: const SettingsAutoplayCheck(),
             ),
+            Container(
+              decoration: BoxDecoration(color: Colors.lime.shade400),
+              child: ListTile(
+                leading: const Icon(Icons.help),
+                title: const Text('About',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                    )),
+                onTap: () {
+                  // Show dialog
+                  // Then close the drawer
+                  Navigator.pop(context);
+                },
+              ),
+            ),
           ],
         ),
       ),
