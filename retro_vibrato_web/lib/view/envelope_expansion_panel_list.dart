@@ -49,8 +49,9 @@ class EnvelopeExpansionPanelList extends StatelessWidget {
           },
           body: Column(
             children: [
-              // Wrap in ChangeNotifierProvider.value for attack
-              // Have child use Consumer
+              // Wrap in ChangeNotifierProvider.value for Field
+              // and have child use Consumer.
+              // Below is using callbacks (not preferred)
               // SettingsSlider(
               //   min: envelopeSettings.attack.min,
               //   max: envelopeSettings.attack.max,

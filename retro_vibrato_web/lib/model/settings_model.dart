@@ -43,19 +43,16 @@ class EnvelopeSettings with ChangeNotifier {
   final Field decay = Field(0.0, 1.0, 0.0, "Decay");
 
   bool get isExpanded {
-    debugPrint('env isExpanded $_isExpanded');
     return _isExpanded;
   }
 
   void expanded() {
     _isExpanded = true;
-    debugPrint('env expanded');
     notifyListeners();
   }
 
   void collapsed() {
     _isExpanded = false;
-    debugPrint('env collapsed');
     notifyListeners();
   }
 }
@@ -231,13 +228,34 @@ class HighPassFilterSettings with ChangeNotifier {
   }
 }
 
+class SampleRateSettings with ChangeNotifier {
+  // final String title = "Sample Rate";
+  final Field rate = Field.noRange(SampleRate.kHz44, "Sample Rate");
+
+  bool _isExpanded = false;
+  bool get isExpanded {
+    return _isExpanded;
+  }
+
+  void expanded() {
+    _isExpanded = true;
+    notifyListeners();
+  }
+
+  void collapsed() {
+    _isExpanded = false;
+    notifyListeners();
+  }
+}
+
 class AppSettings {
   final Field name = Field.noRange("", "Name");
   final Field sfxrFile = Field.noRange("", "Sfxr File");
   final Field waveFile = Field.noRange("", "Wave File");
   final Field destEmail = Field.noRange("", "Destination Email");
   final Field autoplay = Field.noRange(true, "Auto Play");
-  final Field sampleRate = Field.noRange(SampleRate.kHz44, "Sample Rate");
+  // final Field sampleRate = Field.noRange(SampleRate.kHz44, "Sample Rate");
+  final sampleRateSettings = SampleRateSettings();
   final Field sampleSize = Field.noRange(8, "Sample Size");
   final Field volume = Field.noRange(0.5, "Auto Play");
   final Field generator = Field.noRange(Generator.none, "None");
@@ -262,7 +280,7 @@ class SettingsModel with ChangeNotifier {
     appSettings.name.value = jSettings["Name"];
     appSettings.generator.value = _categoryToGenerator(jSettings["Category"]);
     appSettings.wave.value = _waveToGenerator(jSettings["WaveShape"]);
-    appSettings.sampleRate.value = jSettings["SampleRate"];
+    appSettings.sampleRateSettings.rate.value = jSettings["SampleRate"];
     appSettings.sampleSize.value = jSettings["SampleSize"];
     appSettings.volume.value = jSettings["SoundVolume"];
 

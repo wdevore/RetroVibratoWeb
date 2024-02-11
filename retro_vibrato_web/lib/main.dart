@@ -9,10 +9,12 @@ import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Flanger_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Retrigger_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/auto_play.dart';
 import 'package:retro_vibrato_web/view/envelope_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/frequency_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/lowPassFilter_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/sample_rate.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
 
 SettingsModel _settings = SettingsModel();
@@ -196,6 +198,21 @@ class FSfxrHomePage extends StatelessWidget {
                   Navigator.pop(context);
                 },
               ),
+            ),
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.sampleRateSettings,
+                ),
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.sampleRateSettings.rate,
+                ),
+              ],
+              child: const SettingsSampleRateSubPanel(),
+            ),
+            ChangeNotifierProvider.value(
+              value: _settings.appSettings.autoplay,
+              child: const SettingsAutoplayCheck(),
             ),
           ],
         ),
