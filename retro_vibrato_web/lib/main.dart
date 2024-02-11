@@ -1,10 +1,21 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/model/settings_model.dart';
+import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/Flanger_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/Retrigger_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/envelope_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/frequency_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/lowPassFilter_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
+
+SettingsModel _settings = SettingsModel();
 
 void main() {
   runApp(const MainApp());
@@ -26,27 +37,8 @@ class MainApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
         useMaterial3: true,
       ),
-      home: ChangeNotifierProvider(
-        // Initialize the model in the builder. That way, Provider
-        // can own Counter's lifecycle, making sure to call `dispose`
-        // when not needed anymore.
-        create: (context) => Counter(),
-        child: const FSfxrHomePage(title: 'Retro Vibrato'),
-      ),
+      home: const FSfxrHomePage(title: 'Retro Vibrato'),
     );
-  }
-}
-
-/// Simplest possible model, with just one field.
-///
-/// [ChangeNotifier] is a class in `flutter:foundation`. [Counter] does
-/// _not_ depend on Provider.
-class Counter with ChangeNotifier {
-  int value = 0;
-
-  void increment() {
-    value += 1;
-    notifyListeners();
   }
 }
 
@@ -68,74 +60,50 @@ class FSfxrHomePage extends StatelessWidget {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      backgroundColor: Colors.grey[600],
-      appBar: _buildAppBar(context, title),
-      drawer: _buildDrawer(context),
-      body: _buildBody(context),
-      // Place play button in the top right corner
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: _buildPlayButton(
-          context), // This trailing comma makes auto-formatting nicer for build methods.
-    );
-  }
-
-  Container _buildPlayButton(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 50,
-      margin: const EdgeInsets.only(top: kToolbarHeight),
-      child: FloatingActionButton(
-        onPressed: () {
-          var counter = context.read<Counter>();
-          counter.increment();
-          debugPrint('Play');
-        },
-        tooltip: 'Play sound',
-        backgroundColor: Colors.lime,
-        child: const Icon(
-          Icons.play_arrow,
-          size: 50,
-          color: Colors.blue,
-        ),
-      ),
-    );
-  }
-
-  // Main body where slider controls reside
-  Center _buildBody(BuildContext context) {
-    return Center(
-      child: Column(
-        // Column is also a layout widget. It takes a list of children and
-        // arranges them vertically. By default, it sizes itself to fit its
-        // children horizontally, and tries to be as tall as its parent.
-        //
-        // Column has various properties to control how it sizes itself and
-        // how it positions its children. Here we use mainAxisAlignment to
-        // center the children vertically; the main axis here is the vertical
-        // axis because Columns are vertical (the cross axis would be
-        // horizontal).
-        //
-        // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-        // action in the IDE, or press "p" in the console), to see the
-        // wireframe for each widget.
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            'You have pushed the button this many times:',
+        backgroundColor: Colors.grey[600],
+        appBar: _buildAppBar(context, title),
+        drawer: _buildDrawer(context),
+        body: ListView(children: [
+          ChangeNotifierProvider.value(
+            value: _settings.envelopeSettings,
+            child: const EnvelopeExpansionPanelList(),
           ),
-          // Consumer looks for an ancestor Provider widget
-          // and retrieves its model (Counter, in this case).
-          // Then it uses that model to build widgets, and will trigger
-          // rebuilds if the model is updated.
-          Consumer<Counter>(
-            builder: (context, counter, child) => Text(
-              '${counter.value}',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+          ChangeNotifierProvider.value(
+            value: _settings.frequencySettings,
+            child: const FrequencyExpansionPanelList(),
           ),
-        ],
-      ),
-    );
+          ChangeNotifierProvider.value(
+            value: _settings.vibratoSettings,
+            child: const VibratoExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.arpeggiationSettings,
+            child: const ArpeggiationExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.dutyCycleSettings,
+            child: const DutyCycleExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.retriggerSettings,
+            child: const RetriggerExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.flangerSettings,
+            child: const FlangerExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.lowPassFilterSettings,
+            child: const LowPassFilterExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.highPassFilterSettings,
+            child: const HighPassFilterExpansionPanelList(),
+          ),
+        ]),
+        // Place play button in the top right corner
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton: const PlayButtonStatelessWidget());
   }
 
   // Basic title bar
@@ -149,7 +117,7 @@ class FSfxrHomePage extends StatelessWidget {
     );
   }
 
-  // Slide out screen widget
+  // Slide-out screen widget
   Drawer _buildDrawer(BuildContext context) {
     // Add a ListView to the drawer. This ensures the user can scroll
     // through the options in the drawer if there isn't enough vertical
@@ -256,5 +224,34 @@ class FSfxrHomePage extends StatelessWidget {
     } else {
       // debugPrint("No file selected");
     }
+  }
+}
+
+class PlayButtonStatelessWidget extends StatelessWidget {
+  const PlayButtonStatelessWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 50,
+      height: 50,
+      margin: const EdgeInsets.only(top: kToolbarHeight),
+      child: FloatingActionButton(
+        onPressed: () {
+          // var counter = context.read<Counter>();
+          // counter.increment();
+          // debugPrint('Play');
+        },
+        tooltip: 'Play sound',
+        backgroundColor: Colors.lime,
+        child: const Icon(
+          Icons.play_arrow,
+          size: 50,
+          color: Colors.blue,
+        ),
+      ),
+    );
   }
 }
