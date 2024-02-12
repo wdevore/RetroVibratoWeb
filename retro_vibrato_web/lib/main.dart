@@ -250,10 +250,8 @@ class FSfxrHomePage extends StatelessWidget {
       AsciiDecoder decoder = const AsciiDecoder();
       if (bytes != null) {
         String jayson = decoder.convert(bytes.toList());
-        Map<String, dynamic> valueMap = json.decode(jayson);
+        _settings.fromJson(jayson);
       }
-
-      // debugPrint('debug');
     } else {
       // debugPrint("No file selected");
     }

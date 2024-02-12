@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 
@@ -48,11 +49,15 @@ class EnvelopeSettings with ChangeNotifier {
 
   void expanded() {
     _isExpanded = true;
-    notifyListeners();
+    update();
   }
 
   void collapsed() {
     _isExpanded = false;
+    update();
+  }
+
+  void update() {
     notifyListeners();
   }
 }
@@ -275,12 +280,15 @@ class SettingsModel with ChangeNotifier {
   final envelopeSettings = EnvelopeSettings();
 
   void fromJson(String json) {
-    var jSettings = jsonDecode(json);
+    Map<String, dynamic> jSettings = jsonDecode(json);
 
     appSettings.name.value = jSettings["Name"];
     appSettings.generator.value = _categoryToGenerator(jSettings["Category"]);
     appSettings.wave.value = _waveToGenerator(jSettings["WaveShape"]);
+
+    // TODO Convert value into enum
     appSettings.sampleRateSettings.rate.value = jSettings["SampleRate"];
+
     appSettings.sampleSize.value = jSettings["SampleSize"];
     appSettings.volume.value = jSettings["SoundVolume"];
 
@@ -303,7 +311,7 @@ class SettingsModel with ChangeNotifier {
     dutyCycleSettings.sweep.value = jSettings["DutyCycleRamp"];
 
     // Retrigger
-    retriggerSettings.rate.value = jSettings["RepeatSpeed"];
+    retriggerSettings.rate.value = checkRepeatValue(jSettings["RepeatSpeed"]);
 
     // Flanger
     flangerSettings.offset.value = jSettings["FlangerPhaseOffset"];
@@ -314,8 +322,8 @@ class SettingsModel with ChangeNotifier {
         jSettings["LowPassFilterFrequency"];
     lowPassFilterSettings.cutoffSweep.value =
         jSettings["LowPassFilterFrequencyRamp"];
-    lowPassFilterSettings.resonance.value =
-        jSettings["LowPassFilterFrequencyResonance"];
+    lowPassFilterSettings.resonance.value = checkLowPassResonanceValue(
+        jSettings["LowPassFilterFrequencyResonance"]);
 
     // HighPass
     highPassFilterSettings.cutoffFreq.value =
@@ -324,10 +332,31 @@ class SettingsModel with ChangeNotifier {
         jSettings["HighPassFilterFrequencyRamp"];
 
     // Envelope
-    envelopeSettings.attack.value = jSettings["EnvelopeAttack"];
-    envelopeSettings.sustain.value = jSettings["EnvelopeSustain"];
-    envelopeSettings.punch.value = jSettings["EnvelopePunch"];
-    envelopeSettings.decay.value = jSettings["EnvelopeDecay"];
+    envelopeSettings.attack.value =
+        checkEnvelopeValue(jSettings["EnvelopeAttack"]);
+    envelopeSettings.sustain.value =
+        checkEnvelopeValue(jSettings["EnvelopeSustain"]);
+    envelopeSettings.punch.value =
+        checkEnvelopeValue(jSettings["EnvelopePunch"]);
+    envelopeSettings.decay.value =
+        checkEnvelopeValue(jSettings["EnvelopeDecay"]);
+  }
+
+  // The "check" methods try to ensure that the json
+  // data is within the respective ranges.
+  // Early version of my SFxr adaptations would generate
+  // values outside those ranges.
+  double checkLowPassResonanceValue(double v) {
+    return v < 0 ? (v + 0.5).abs() : v;
+  }
+
+  double checkEnvelopeValue(double v) {
+    return v < 0 ? (v + 0.5).abs() : v;
+  }
+
+  // Retrigger
+  double checkRepeatValue(double v) {
+    return v < 0 ? min(v + 1.0, 0.95).abs() : min(v, 0.95).abs();
   }
 
   Generator _categoryToGenerator(String cat) {
