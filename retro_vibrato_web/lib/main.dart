@@ -10,6 +10,7 @@ import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Flanger_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Retrigger_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/auto_play.dart';
+import 'package:retro_vibrato_web/view/drawer_io_expansion_panel.dart';
 import 'package:retro_vibrato_web/view/envelope_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/frequency_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart';
@@ -146,59 +147,7 @@ class FSfxrHomePage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.orange.shade100,
-              ),
-              child: ListTile(
-                leading: const Icon(Icons.save_outlined),
-                title: const Text(
-                  'Save as *.Sfxr',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                  ),
-                ),
-                onTap: () {
-                  // Save and close drawer
-                  debugPrint('Tapped');
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(color: Colors.orange.shade200),
-              child: ListTile(
-                leading: const Icon(Icons.save_outlined),
-                title: const Text('Save as *.wav',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    )),
-                onTap: () {
-                  // Update the state of the app
-                  // ...
-                  // Then close the drawer
-                  Navigator.pop(context);
-                },
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(color: Colors.orange.shade200),
-              child: ListTile(
-                leading: const Icon(Icons.save_outlined),
-                title: const Text('Open Sfxr file',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 20,
-                    )),
-                onTap: () {
-                  // Then close the drawer
-                  _openSfxr();
-                  Navigator.pop(context);
-                },
-              ),
-            ),
+            DrawerIOExpansionPanel(settings: _settings),
             MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(

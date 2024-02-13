@@ -19,10 +19,34 @@ One kind of fix would be to *abs(add 0.5)* to anything < 0.
 
 The fix for Random would be to check what the range is and use that instead of hardcoded (-1,1)
 
+# Menus
+- Generators
+- Wave Forms
+- Save
+    - sfxr
+    - wave
+- Load
+    - sfxr
+- Autoplay checkbox
+- Sample Rate
+    - 44 KHz
+    - 22 KHz
+    - 11 KHz
+    - 5.5 KHz
+- Volume slider
+- Email
+    - Email address
+    - Type
+        - sfxr
+        - wave
+- About
+
 # Tasks
 - ☑ Settings sliders
-- ☑ State management figured out
-- ☒ Load/saving json and updating GUI
+- ☑ State management. Used Provider
+- ☑ Load json and updating GUI
+- ☒ Saving json and updating GUI
+- ☒ Clicking a slider label resets it
 - ☒ Saving wave file via download
 - ☒ Porting generator algorithm from Ranger-Go-IGE
 - ☒ Add Generator selector (top)
@@ -31,3 +55,6 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☒ Add SampleSize 
 - ☒ Implement play button
 - ☒ Add Help popup
+
+https://pub.dev/packages/audiofileplayer
+audiofileplayer 2.0.1
