@@ -50,6 +50,19 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
           },
           body: Column(
             children: [
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 6.0, right: 0.0, bottom: 4.0),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Save/Download name',
+                  ),
+                  onSubmitted: (String value) {
+                    widget.settings.downloadName = value;
+                  },
+                ),
+              ),
               Container(
                 decoration: BoxDecoration(color: Colors.orange.shade100),
                 child: ListTile(
@@ -111,23 +124,32 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
 
   void _saveSfxr() {
     // Get text version from settings
-    String contents = '';
+    String contents = """
+      {
+          "Format": "InternalView",
+          "Category": "Random",
+          "Name": "Tone3",
+          "BaseFrequency": 1.293542900416264,
+      }
+      """;
 
     // Create the link with the file
-    final anchor =
-        AnchorElement(href: 'data:application/octet-stream;text,$contents')
-          ..target = 'blank';
+    final anchor = AnchorElement(href: 'data:text/plain,$contents')
+      ..target = 'blank';
 
     // add the name
-    // if (downloadName != null) {
-    anchor.download = 'test.sfxr'; //downloadName;
-    // }
-    // trigger download
+    String name = widget.settings.downloadName ?? 'noName.sfxr';
+    if (!name.contains('.sfxr')) {
+      name += '.sfxr';
+    }
+
+    anchor.download = name;
     document.body!.append(anchor);
 
     // You could also set download via attributes
     // ..setAttribute("download", "file.txt")
 
+    // trigger download
     anchor.click();
     anchor.remove();
 

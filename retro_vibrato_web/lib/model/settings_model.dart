@@ -279,6 +279,12 @@ class SettingsModel with ChangeNotifier {
   final highPassFilterSettings = HighPassFilterSettings();
   final envelopeSettings = EnvelopeSettings();
 
+  String? downloadName;
+
+  String toJson() {
+    return 'Null';
+  }
+
   void fromJson(String json) {
     Map<String, dynamic> jSettings = jsonDecode(json);
 
