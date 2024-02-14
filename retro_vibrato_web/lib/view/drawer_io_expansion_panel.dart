@@ -52,7 +52,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(
-                    left: 0.0, top: 6.0, right: 0.0, bottom: 4.0),
+                    left: 0.0, top: 8.0, right: 0.0, bottom: 4.0),
                 child: TextField(
                   decoration: const InputDecoration(
                     border: OutlineInputBorder(),
@@ -111,6 +111,19 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                     // Then close the drawer
                     _openSfxr();
                     Navigator.pop(context);
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(
+                    left: 0.0, top: 8.0, right: 0.0, bottom: 4.0),
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Name of sound',
+                  ),
+                  onSubmitted: (String value) {
+                    widget.settings.appSettings.name.value = value;
                   },
                 ),
               ),

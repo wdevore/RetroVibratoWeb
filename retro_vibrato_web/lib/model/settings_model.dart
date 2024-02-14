@@ -282,7 +282,14 @@ class SettingsModel with ChangeNotifier {
   String? downloadName;
 
   String toJson() {
-    return 'Null';
+    String json = """
+{
+  "format": "InternalView",
+  "Category": ${appSettings.generator.value}",
+}
+""";
+
+    return json;
   }
 
   void fromJson(String json) {
