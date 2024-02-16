@@ -15,6 +15,7 @@ import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart'
 import 'package:retro_vibrato_web/view/lowPassFilter_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/play_button_stateless_widget.dart';
 import 'package:retro_vibrato_web/view/sample_rate.dart';
+import 'package:retro_vibrato_web/view/settings_slider.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
 
 SettingsModel _settings = SettingsModel();
@@ -167,6 +168,13 @@ class FSfxrHomePage extends StatelessWidget {
                 ),
               ],
               child: const WaveformSubPanel(),
+            ),
+            ChangeNotifierProvider.value(
+              value: _settings.appSettings.volume,
+              child: const SettingsSlider(
+                height: 40,
+                flex: 3,
+              ),
             ),
             DrawerIOExpansionPanel(settings: _settings),
             MultiProvider(

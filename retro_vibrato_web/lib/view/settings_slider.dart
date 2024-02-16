@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/model/field.dart';
-import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/custom_slider_thumb_rect.dart';
 
 class SettingsSlider extends StatelessWidget {
   const SettingsSlider({
     Key? key,
+    required this.height,
+    required this.flex,
   }) : super(key: key);
+
+  final double height;
+  final int flex;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +21,7 @@ class SettingsSlider extends StatelessWidget {
 
     return Consumer<Field>(
       builder: (_, field, __) => SizedBox(
-        height: 30,
+        height: height,
         child: Row(
           children: [
             Expanded(
@@ -41,7 +45,7 @@ class SettingsSlider extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 4,
+              flex: flex,
               child: SliderTheme(
                 data: SliderTheme.of(context).copyWith(
                   activeTrackColor: Colors.orange,

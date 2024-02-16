@@ -51,11 +51,17 @@ class DutyCycleExpansionPanelList extends StatelessWidget {
             children: [
               ChangeNotifierProvider.value(
                 value: settings.dutyCycle,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.sweep,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
             ],
           ),

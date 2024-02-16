@@ -61,19 +61,31 @@ class EnvelopeExpansionPanelList extends StatelessWidget {
               // ),
               ChangeNotifierProvider.value(
                 value: settings.attack,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 40,
+                  flex: 4,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.sustain,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.punch,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.decay,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
             ],
           ),

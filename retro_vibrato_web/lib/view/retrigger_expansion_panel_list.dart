@@ -51,7 +51,10 @@ class RetriggerExpansionPanelList extends StatelessWidget {
             children: [
               ChangeNotifierProvider.value(
                 value: settings.rate,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 4,
+                ),
               ),
             ],
           ),

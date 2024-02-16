@@ -51,11 +51,17 @@ class ArpeggiationExpansionPanelList extends StatelessWidget {
             children: [
               ChangeNotifierProvider.value(
                 value: settings.multiplier,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 40,
+                  flex: 4,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.speed,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 40,
+                  flex: 4,
+                ),
               ),
             ],
           ),

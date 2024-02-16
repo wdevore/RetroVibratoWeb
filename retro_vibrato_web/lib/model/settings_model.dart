@@ -165,8 +165,8 @@ class FlangerSettings with ChangeNotifier {
 
 class LowPassFilterSettings with ChangeNotifier {
   final String title = "LowPass Filter";
-  final Field cutoffFreq = Field(0.0, 1.0, 0.0, "CutoffFreq");
-  final Field cutoffSweep = Field(-1.0, 1.0, 0.0, "CutoffSweep");
+  final Field cutoffFreq = Field(0.0, 1.0, 0.0, "Cutoff Freq");
+  final Field cutoffSweep = Field(-1.0, 1.0, 0.0, "Cutoff Sweep");
   final Field resonance = Field(0.035, 1.0, 0.035, "Resonance");
 
   bool _isExpanded = false;
@@ -187,8 +187,8 @@ class LowPassFilterSettings with ChangeNotifier {
 
 class HighPassFilterSettings with ChangeNotifier {
   final String title = "HighPass Filter";
-  final Field cutoffFreq = Field(0.0, 1.0, 0.0, "CutoffFreq");
-  final Field cutoffSweep = Field(-1.0, 1.0, 0.0, "CutoffSweep");
+  final Field cutoffFreq = Field(0.0, 1.0, 0.0, "Cutoff Freq");
+  final Field cutoffSweep = Field(-1.0, 1.0, 0.0, "Cutoff Sweep");
 
   bool _isExpanded = false;
   bool get isExpanded {
@@ -271,7 +271,7 @@ class AppSettings {
   final Field autoplay = Field.noRange(true, "Auto Play");
   final sampleRateSettings = SampleRateSettings();
   final Field sampleSize = Field.noRange(8, "Sample Size");
-  final Field volume = Field.noRange(0.5, "Auto Play");
+  final Field volume = Field.noRange(0.5, "Volume");
   final generatorSettings = GeneratorSettings();
   final waveformSettings = WaveformSettings();
 }

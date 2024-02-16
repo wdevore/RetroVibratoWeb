@@ -51,11 +51,17 @@ class HighPassFilterExpansionPanelList extends StatelessWidget {
             children: [
               ChangeNotifierProvider.value(
                 value: settings.cutoffFreq,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 3,
+                ),
               ),
               ChangeNotifierProvider.value(
                 value: settings.cutoffSweep,
-                child: const SettingsSlider(),
+                child: const SettingsSlider(
+                  height: 30,
+                  flex: 3,
+                ),
               ),
             ],
           ),
