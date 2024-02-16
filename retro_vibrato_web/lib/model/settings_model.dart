@@ -2,36 +2,9 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
+import 'package:retro_vibrato_web/model/field.dart';
 
 import 'enums.dart';
-
-class Field with ChangeNotifier {
-  double min = 0.0;
-  double max = 1.0;
-
-  dynamic _value = 0;
-  dynamic rValue = 0;
-
-  String label = "";
-
-  Field(this.min, this.max, this._value, this.label) {
-    rValue = _value;
-  }
-  Field.noRange(this._value, this.label) {
-    rValue = _value;
-  }
-
-  set value(dynamic v) {
-    _value = v;
-    notifyListeners();
-  }
-
-  dynamic get value => _value;
-
-  reset() {
-    value = rValue;
-  }
-}
 
 class EnvelopeSettings with ChangeNotifier {
   final String title = "Envelope";
@@ -234,8 +207,45 @@ class HighPassFilterSettings with ChangeNotifier {
 }
 
 class SampleRateSettings with ChangeNotifier {
-  // final String title = "Sample Rate";
   final Field rate = Field.noRange(SampleRate.kHz44, "Sample Rate");
+
+  bool _isExpanded = false;
+  bool get isExpanded {
+    return _isExpanded;
+  }
+
+  void expanded() {
+    _isExpanded = true;
+    notifyListeners();
+  }
+
+  void collapsed() {
+    _isExpanded = false;
+    notifyListeners();
+  }
+}
+
+class GeneratorSettings with ChangeNotifier {
+  final Field type = Field.noRange(Generator.none, "Generators");
+
+  bool _isExpanded = false;
+  bool get isExpanded {
+    return _isExpanded;
+  }
+
+  void expanded() {
+    _isExpanded = true;
+    notifyListeners();
+  }
+
+  void collapsed() {
+    _isExpanded = false;
+    notifyListeners();
+  }
+}
+
+class WaveformSettings with ChangeNotifier {
+  final Field type = Field.noRange(WaveForm.none, "Waveforms");
 
   bool _isExpanded = false;
   bool get isExpanded {
@@ -259,12 +269,11 @@ class AppSettings {
   final Field waveFile = Field.noRange("", "Wave File");
   final Field destEmail = Field.noRange("", "Destination Email");
   final Field autoplay = Field.noRange(true, "Auto Play");
-  // final Field sampleRate = Field.noRange(SampleRate.kHz44, "Sample Rate");
   final sampleRateSettings = SampleRateSettings();
   final Field sampleSize = Field.noRange(8, "Sample Size");
   final Field volume = Field.noRange(0.5, "Auto Play");
-  final Field generator = Field.noRange(Generator.none, "None");
-  final Field wave = Field.noRange(WaveForm.none, "None");
+  final generatorSettings = GeneratorSettings();
+  final waveformSettings = WaveformSettings();
 }
 
 class SettingsModel with ChangeNotifier {
@@ -284,8 +293,35 @@ class SettingsModel with ChangeNotifier {
   String toJson() {
     String json = """
 {
-  "format": "InternalView",
-  "Category": ${appSettings.generator.value}",
+  "Format": "InternalView",
+  "Category": "${_generatorToString(appSettings.generatorSettings.type.value)}",
+  "Name": "${appSettings.name.value}",
+  "BaseFrequency": ${frequencySettings.frequency.value},
+  "FrequencyLimit": ${frequencySettings.minCutoff.value},
+  "FrequencyRamp": ${frequencySettings.slide.value},
+  "FrequencyDeltaRamp": ${frequencySettings.deltaSlide.value},
+  "VibratoStrength": ${vibratoSettings.depth.value},
+  "VibratoSpeed": ${vibratoSettings.speed.value},
+  "ArpeggioMod": ${arpeggiationSettings.multiplier.value},
+  "ArpeggioSpeed": ${arpeggiationSettings.speed.value},
+  "DutyCycle": ${dutyCycleSettings.dutyCycle.value},
+  "DutyCycleRamp": ${dutyCycleSettings.sweep.value},
+  "RepeatSpeed": ${retriggerSettings.rate.value},
+  "FlangerPhaseOffset": ${flangerSettings.offset.value},
+  "FlangerPhaseRamp": ${flangerSettings.sweep.value},
+  "LowPassFilterFrequency": ${lowPassFilterSettings.cutoffFreq.value},
+  "LowPassFilterFrequencyRamp": ${lowPassFilterSettings.cutoffSweep.value},
+  "LowPassFilterFrequencyResonance": ${lowPassFilterSettings.resonance.value},
+  "HighPassFilterFrequency": ${highPassFilterSettings.cutoffFreq.value},
+  "HighPassFilterFrequencyRamp": ${highPassFilterSettings.cutoffSweep.value},
+  "EnvelopeAttack": ${envelopeSettings.attack.value},
+  "EnvelopeSustain": ${envelopeSettings.sustain.value},
+  "EnvelopePunch": ${envelopeSettings.punch.value},
+  "EnvelopeDecay": ${envelopeSettings.decay.value},
+  "WaveShape": "${_waveToString(appSettings.waveformSettings.type.value)}",
+  "SampleRate": "${_rateToString(appSettings.sampleRateSettings.rate.value)}",
+  "SampleSize": "${_sizeToString(appSettings.sampleSize.value)}",
+  "SoundVolume": ${appSettings.volume.value}
 }
 """;
 
@@ -296,13 +332,15 @@ class SettingsModel with ChangeNotifier {
     Map<String, dynamic> jSettings = jsonDecode(json);
 
     appSettings.name.value = jSettings["Name"];
-    appSettings.generator.value = _categoryToGenerator(jSettings["Category"]);
-    appSettings.wave.value = _waveToGenerator(jSettings["WaveShape"]);
+    appSettings.generatorSettings.type.value =
+        _categoryToGenerator(jSettings["Category"]);
+    appSettings.waveformSettings.type.value =
+        _waveToGenerator(jSettings["WaveShape"]);
 
-    // TODO Convert value into enum
-    appSettings.sampleRateSettings.rate.value = jSettings["SampleRate"];
+    appSettings.sampleRateSettings.rate.value =
+        _rateToSampleRate(jSettings["SampleRate"]);
 
-    appSettings.sampleSize.value = jSettings["SampleSize"];
+    appSettings.sampleSize.value = _sizeToSampleSize(jSettings["SampleSize"]);
     appSettings.volume.value = jSettings["SoundVolume"];
 
     // Frequency
@@ -374,51 +412,153 @@ class SettingsModel with ChangeNotifier {
 
   Generator _categoryToGenerator(String cat) {
     switch (cat) {
-      case "PickUp":
+      case "pickUp":
         return Generator.pickUp;
-      case "Laser":
+      case "laser":
         return Generator.laser;
-      case "Explosion":
+      case "explosion":
         return Generator.explosion;
-      case "PowerUp":
+      case "powerUp":
         return Generator.powerUp;
-      case "Hit":
+      case "hit":
         return Generator.hit;
-      case "Blip":
+      case "blip":
         return Generator.blip;
-      case "Synth":
+      case "synth":
         return Generator.synth;
-      case "Random":
+      case "random":
         return Generator.random;
-      case "Tone":
+      case "tone":
         return Generator.tone;
-      case "Mutate":
+      case "mutate":
         return Generator.mutate;
       default:
         return Generator.none;
     }
   }
 
-  WaveForm _waveToGenerator(int wave) {
+  String _generatorToString(Generator gen) {
+    switch (gen) {
+      case Generator.pickUp:
+        return "pickUp";
+      case Generator.laser:
+        return "laser";
+      case Generator.explosion:
+        return "explosion";
+      case Generator.powerUp:
+        return "powerUp";
+      case Generator.hit:
+        return "hit";
+      case Generator.blip:
+        return "blip";
+      case Generator.synth:
+        return "synth";
+      case Generator.random:
+        return "random";
+      case Generator.tone:
+        return "tone";
+      case Generator.mutate:
+        return "mutate";
+      default:
+        return "none";
+    }
+  }
+
+  WaveForm _waveToGenerator(String wave) {
     switch (wave) {
-      case 0:
+      case "square":
         return WaveForm.square;
-      case 1:
+      case "triangle":
         return WaveForm.triangle;
-      case 2:
+      case "sine":
         return WaveForm.sine;
-      case 3:
+      case "sawtoothFalling":
         return WaveForm.sawtoothFalling;
-      case 4:
+      case "whiteNoise":
         return WaveForm.whiteNoise;
-      case 5:
+      case "pinkNoise":
         return WaveForm.pinkNoise;
-      case 6:
+      case "redNoise":
         return WaveForm.redNoise; // Brownian/red
-      case 7:
+      case "sawtoothRising":
         return WaveForm.sawtoothRising;
       default:
         return WaveForm.none;
+    }
+  }
+
+  String _waveToString(WaveForm wave) {
+    switch (wave) {
+      case WaveForm.square:
+        return "square";
+      case WaveForm.triangle:
+        return "triangle";
+      case WaveForm.sine:
+        return "sine";
+      case WaveForm.sawtoothFalling:
+        return "sawtoothFalling";
+      case WaveForm.whiteNoise:
+        return "whiteNoise";
+      case WaveForm.pinkNoise:
+        return "pinkNoise";
+      case WaveForm.redNoise:
+        return "redNoise"; // Brownian/red
+      case WaveForm.sawtoothRising:
+        return "sawtoothRising";
+      default:
+        return "none";
+    }
+  }
+
+  String _rateToString(SampleRate rate) {
+    switch (rate) {
+      case SampleRate.kHz44:
+        return "kHz44";
+      case SampleRate.kHz22:
+        return "kHz22";
+      case SampleRate.kHz11:
+        return "kHz11";
+      case SampleRate.kHz55:
+        return "kHz55"; // 5.5KHz
+      default:
+        return "none";
+    }
+  }
+
+  SampleRate _rateToSampleRate(String rate) {
+    switch (rate) {
+      case "kHz44":
+        return SampleRate.kHz44;
+      case "kHz22":
+        return SampleRate.kHz22;
+      case "kHz11":
+        return SampleRate.kHz11;
+      case "kHz55":
+        return SampleRate.kHz55; // 5.5KHz
+      default:
+        return SampleRate.none;
+    }
+  }
+
+  String _sizeToString(SampleSize size) {
+    switch (size) {
+      case SampleSize.bits16:
+        return "bits16";
+      case SampleSize.bits8:
+        return "bits8";
+      default:
+        return "none";
+    }
+  }
+
+  SampleSize _sizeToSampleSize(String size) {
+    switch (size) {
+      case "bits16":
+        return SampleSize.bits16;
+      case "bits8":
+        return SampleSize.bits8;
+      default:
+        return SampleSize.none;
     }
   }
 }

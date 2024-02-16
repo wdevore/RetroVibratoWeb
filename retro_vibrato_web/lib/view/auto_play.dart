@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
 class SettingsAutoplayCheck extends StatelessWidget {
@@ -9,7 +10,7 @@ class SettingsAutoplayCheck extends StatelessWidget {
   Widget build(BuildContext context) {
     return Consumer<Field>(
       builder: (_, autoplay, __) => Container(
-        decoration: BoxDecoration(color: Colors.lime.shade300),
+        decoration: BoxDecoration(color: Colors.lime.shade500),
         child: CheckboxListTile(
           title: const Text(
             'Auto Play',

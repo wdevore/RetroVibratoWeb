@@ -21,6 +21,17 @@ class DrawerIOExpansionPanel extends StatefulWidget {
 
 class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
   bool _isExpanded = false;
+  // We need these controllers to maintain values between drawer
+  // collapse and expand.
+  final TextEditingController _downloadController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    _downloadController.text = widget.settings.downloadName ?? '';
+    _nameController.text = widget.settings.appSettings.name.value ?? '';
+    return super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,6 +69,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                     border: OutlineInputBorder(),
                     labelText: 'Save/Download name',
                   ),
+                  controller: _downloadController,
                   onSubmitted: (String value) {
                     widget.settings.downloadName = value;
                   },
@@ -122,6 +134,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                     border: OutlineInputBorder(),
                     labelText: 'Name of sound',
                   ),
+                  controller: _nameController,
                   onSubmitted: (String value) {
                     widget.settings.appSettings.name.value = value;
                   },
@@ -136,15 +149,8 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
   }
 
   void _saveSfxr() {
-    // Get text version from settings
-    String contents = """
-      {
-          "Format": "InternalView",
-          "Category": "Random",
-          "Name": "Tone3",
-          "BaseFrequency": 1.293542900416264,
-      }
-      """;
+    // Get json from settings
+    String contents = widget.settings.toJson();
 
     // Create the link with the file
     final anchor = AnchorElement(href: 'data:text/plain,$contents')

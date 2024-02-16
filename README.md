@@ -22,18 +22,18 @@ The fix for Random would be to check what the range is and use that instead of h
 # Menus
 - Generators
 - Wave Forms
+- Volume slider
 - Save
     - sfxr
     - wave
 - Load
     - sfxr
-- Autoplay checkbox
 - Sample Rate
     - 44 KHz
     - 22 KHz
     - 11 KHz
     - 5.5 KHz
-- Volume slider
+- Autoplay checkbox
 - Email
     - Email address
     - Type
@@ -45,14 +45,14 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Settings sliders
 - ☑ State management. Used Provider
 - ☑ Load json and updating GUI
-- ☒ Saving json and updating GUI
-- ☒ Clicking a slider label resets it
-- ☒ Saving wave file via download
-- ☒ Porting generator algorithm from Ranger-Go-IGE
-- ☒ Add Generator selector (top)
-- ☒ Add Wave form selector (under top)
+- ☑ Saving json and updating GUI
+- ☑ Clicking a slider label resets it to Reset value
+- ☑ Add Generator selector (top)
+- ☑ Add Wave form selector (under top)
 - ☒ Add volume slider (next)
 - ☒ Add SampleSize 
+- ☒ Porting generator algorithm from Ranger-Go-IGE
+- ☒ Saving wave file via download
 - ☒ Implement play button
 - ☒ Add Help popup
 

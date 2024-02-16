@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
+import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
 class SettingsSampleRateSubPanel extends StatelessWidget {
@@ -24,7 +25,7 @@ class SettingsSampleRateSubPanel extends StatelessWidget {
       children: [
         ExpansionPanel(
           canTapOnHeader: true,
-          backgroundColor: Colors.lime.shade200,
+          backgroundColor: Colors.lime.shade300,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return const Center(
               child: Text(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/custom_slider_thumb_rect.dart';
 
@@ -25,11 +26,16 @@ class SettingsSlider extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 2.0),
                 child: Align(
                   alignment: Alignment.centerRight,
-                  child: Text(
-                    field.label,
-                    style: const TextStyle(
-                      color: Colors.white,
+                  child: TextButton(
+                    child: Text(
+                      field.label,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
+                    onPressed: () {
+                      field.value = field.rValue;
+                    },
                   ),
                 ),
               ),

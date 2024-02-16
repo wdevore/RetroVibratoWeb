@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
@@ -10,11 +6,14 @@ import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Flanger_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/Retrigger_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/auto_play.dart';
+import 'package:retro_vibrato_web/view/drawer_generator_expansion_panel.dart';
 import 'package:retro_vibrato_web/view/drawer_io_expansion_panel.dart';
+import 'package:retro_vibrato_web/view/drawer_waveform_expansion_panel.dart';
 import 'package:retro_vibrato_web/view/envelope_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/frequency_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/lowPassFilter_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/view/play_button_stateless_widget.dart';
 import 'package:retro_vibrato_web/view/sample_rate.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
 
@@ -147,6 +146,28 @@ class FSfxrHomePage extends StatelessWidget {
                 ),
               ),
             ),
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.generatorSettings,
+                ),
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.generatorSettings.type,
+                ),
+              ],
+              child: const GeneratorsSubPanel(),
+            ),
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.waveformSettings,
+                ),
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.waveformSettings.type,
+                ),
+              ],
+              child: const WaveformSubPanel(),
+            ),
             DrawerIOExpansionPanel(settings: _settings),
             MultiProvider(
               providers: [
@@ -180,56 +201,6 @@ class FSfxrHomePage extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  void _openSfxr() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      // onFileLoading: (FilePickerStatus status) =>
-      //     debugPrint('Pick status: $status'),
-      allowedExtensions: ['json'],
-    );
-
-    if (result != null) {
-      Uint8List? bytes = result.files.single.bytes;
-
-      AsciiDecoder decoder = const AsciiDecoder();
-      if (bytes != null) {
-        String jayson = decoder.convert(bytes.toList());
-        _settings.fromJson(jayson);
-      }
-    } else {
-      // debugPrint("No file selected");
-    }
-  }
-}
-
-class PlayButtonStatelessWidget extends StatelessWidget {
-  const PlayButtonStatelessWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 50,
-      height: 50,
-      margin: const EdgeInsets.only(top: kToolbarHeight),
-      child: FloatingActionButton(
-        onPressed: () {
-          // var counter = context.read<Counter>();
-          // counter.increment();
-          // debugPrint('Play');
-        },
-        tooltip: 'Play sound',
-        backgroundColor: Colors.lime,
-        child: const Icon(
-          Icons.play_arrow,
-          size: 50,
-          color: Colors.blue,
         ),
       ),
     );

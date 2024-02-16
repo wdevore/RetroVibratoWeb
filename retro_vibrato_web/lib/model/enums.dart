@@ -31,4 +31,11 @@ enum SampleRate {
   kHz22,
   kHz11,
   kHz55, // 5.5 KHz
+  none,
+}
+
+enum SampleSize {
+  bits16, // 16 bits
+  bits8,
+  none,
 }
