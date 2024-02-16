@@ -49,7 +49,7 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Clicking a slider label resets it to Reset value
 - ☑ Add Generator selector (top)
 - ☑ Add Wave form selector (under top)
-- ☒ Add volume slider (next)
+- ☑ Add volume slider (next)
 - ☒ Add SampleSize 
 - ☒ Porting generator algorithm from Ranger-Go-IGE
 - ☒ Saving wave file via download

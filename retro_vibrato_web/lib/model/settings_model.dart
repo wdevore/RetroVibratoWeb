@@ -225,6 +225,25 @@ class SampleRateSettings with ChangeNotifier {
   }
 }
 
+class SampleSizeSettings with ChangeNotifier {
+  final Field size = Field.noRange(SampleSize.bits8, "Sample Size");
+
+  bool _isExpanded = false;
+  bool get isExpanded {
+    return _isExpanded;
+  }
+
+  void expanded() {
+    _isExpanded = true;
+    notifyListeners();
+  }
+
+  void collapsed() {
+    _isExpanded = false;
+    notifyListeners();
+  }
+}
+
 class GeneratorSettings with ChangeNotifier {
   final Field type = Field.noRange(Generator.none, "Generators");
 
@@ -270,7 +289,7 @@ class AppSettings {
   final Field destEmail = Field.noRange("", "Destination Email");
   final Field autoplay = Field.noRange(true, "Auto Play");
   final sampleRateSettings = SampleRateSettings();
-  final Field sampleSize = Field.noRange(8, "Sample Size");
+  final sampleSizeSettings = SampleSizeSettings();
   final Field volume = Field.noRange(0.5, "Volume");
   final generatorSettings = GeneratorSettings();
   final waveformSettings = WaveformSettings();
@@ -320,7 +339,7 @@ class SettingsModel with ChangeNotifier {
   "EnvelopeDecay": ${envelopeSettings.decay.value},
   "WaveShape": "${_waveToString(appSettings.waveformSettings.type.value)}",
   "SampleRate": "${_rateToString(appSettings.sampleRateSettings.rate.value)}",
-  "SampleSize": "${_sizeToString(appSettings.sampleSize.value)}",
+  "SampleSize": "${_sizeToString(appSettings.sampleSizeSettings.size.value)}",
   "SoundVolume": ${appSettings.volume.value}
 }
 """;
@@ -340,7 +359,8 @@ class SettingsModel with ChangeNotifier {
     appSettings.sampleRateSettings.rate.value =
         _rateToSampleRate(jSettings["SampleRate"]);
 
-    appSettings.sampleSize.value = _sizeToSampleSize(jSettings["SampleSize"]);
+    appSettings.sampleSizeSettings.size.value =
+        _sizeToSampleSize(jSettings["SampleSize"]);
     appSettings.volume.value = jSettings["SoundVolume"];
 
     // Frequency

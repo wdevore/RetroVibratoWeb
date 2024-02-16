@@ -15,6 +15,7 @@ import 'package:retro_vibrato_web/view/highPassFilter_expansion_panel_list.dart'
 import 'package:retro_vibrato_web/view/lowPassFilter_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/play_button_stateless_widget.dart';
 import 'package:retro_vibrato_web/view/sample_rate.dart';
+import 'package:retro_vibrato_web/view/sample_size.dart';
 import 'package:retro_vibrato_web/view/settings_slider.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
 
@@ -187,6 +188,17 @@ class FSfxrHomePage extends StatelessWidget {
                 ),
               ],
               child: const SettingsSampleRateSubPanel(),
+            ),
+            MultiProvider(
+              providers: [
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.sampleSizeSettings,
+                ),
+                ChangeNotifierProvider.value(
+                  value: _settings.appSettings.sampleSizeSettings.size,
+                ),
+              ],
+              child: const SettingsSampleSizeSubPanel(),
             ),
             ChangeNotifierProvider.value(
               value: _settings.appSettings.autoplay,
