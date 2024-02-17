@@ -1,7 +1,13 @@
 # RetroVibratoWeb
 A web version RetroVibrato that it in turn is based off of sfrxr.js
 
+Rev 1
+
 ![RetroVibratoWeb_P1 gif](retrovibratoweb_p1.gif)
+
+Rev 2
+
+![RetroVibratoWeb_P2 gif](retrovibratoweb_p2.gif)
 
 [RetroVi
 # Notes
@@ -50,10 +56,10 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Add Generator selector (top)
 - ☑ Add Wave form selector (under top)
 - ☑ Add volume slider (next)
-- ☒ Add SampleSize 
+- ☑ Add SampleSize 
 - ☒ Porting generator algorithm from Ranger-Go-IGE
-- ☒ Saving wave file via download
 - ☒ Implement play button
+- ☒ Saving wave file via download
 - ☒ Add Help popup
 
 https://pub.dev/packages/audiofileplayer

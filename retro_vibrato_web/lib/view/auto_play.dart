@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/model/field.dart';
-import 'package:retro_vibrato_web/model/settings_model.dart';
 
 class SettingsAutoplayCheck extends StatelessWidget {
   const SettingsAutoplayCheck({Key? key}) : super(key: key);
