@@ -119,10 +119,13 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                         color: Colors.black,
                         fontSize: 20,
                       )),
-                  onTap: () {
+                  onTap: () async {
+                    await _openSfxr();
+                    // TODO Update call isn't really needed
+                    // widget.settings.update();
+
                     // Then close the drawer
-                    _openSfxr();
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                 ),
               ),
@@ -175,7 +178,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
     return;
   }
 
-  void _openSfxr() async {
+  Future<void> _openSfxr() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       type: FileType.custom,
       // onFileLoading: (FilePickerStatus status) =>
@@ -194,5 +197,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
     } else {
       // debugPrint("No file selected");
     }
+
+    return;
   }
 }

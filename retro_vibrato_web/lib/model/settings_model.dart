@@ -261,6 +261,11 @@ class GeneratorSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void update() {
+    type.update();
+    notifyListeners();
+  }
 }
 
 class WaveformSettings with ChangeNotifier {
@@ -293,6 +298,11 @@ class AppSettings {
   final Field volume = Field.noRange(0.5, "Volume");
   final generatorSettings = GeneratorSettings();
   final waveformSettings = WaveformSettings();
+
+  void update() {
+    name.update();
+    generatorSettings.update();
+  }
 }
 
 class SettingsModel with ChangeNotifier {
@@ -306,6 +316,12 @@ class SettingsModel with ChangeNotifier {
   final lowPassFilterSettings = LowPassFilterSettings();
   final highPassFilterSettings = HighPassFilterSettings();
   final envelopeSettings = EnvelopeSettings();
+
+  // Note: these update methods are really not needed.
+  // TODO remove
+  void update() {
+    appSettings.update();
+  }
 
   String? downloadName;
 

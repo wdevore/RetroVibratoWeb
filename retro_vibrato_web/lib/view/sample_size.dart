@@ -25,7 +25,7 @@ class SettingsSampleSizeSubPanel extends StatelessWidget {
       children: [
         ExpansionPanel(
           canTapOnHeader: true,
-          backgroundColor: Colors.lime.shade300,
+          backgroundColor: Colors.lime.shade400,
           headerBuilder: (BuildContext context, bool isExpanded) {
             return const Center(
               child: Text(
