@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/configurations.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
 class GeneratorsSubPanel extends StatelessWidget {
-  const GeneratorsSubPanel({Key? key}) : super(key: key);
+  const GeneratorsSubPanel({
+    Key? key,
+    required this.configurations,
+  }) : super(key: key);
+
+  final Configurations configurations;
 
   @override
   Widget build(BuildContext context) {

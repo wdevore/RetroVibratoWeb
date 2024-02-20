@@ -22,7 +22,7 @@ enum WaveForm {
   sawtoothFalling,
   whiteNoise,
   pinkNoise,
-  redNoise,
+  redNoise, // Brownian/red
   none,
 }
 

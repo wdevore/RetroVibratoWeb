@@ -25,6 +25,7 @@ class Field with ChangeNotifier {
 
   reset() {
     value = rValue;
+    notifyListeners();
   }
 
   void update() {

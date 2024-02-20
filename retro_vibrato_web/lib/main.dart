@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/configurations.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
@@ -157,7 +158,8 @@ class FSfxrHomePage extends StatelessWidget {
                   value: _settings.appSettings.generatorSettings.type,
                 ),
               ],
-              child: const GeneratorsSubPanel(),
+              child:
+                  GeneratorsSubPanel(configurations: Configurations(_settings)),
             ),
             MultiProvider(
               providers: [

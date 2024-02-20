@@ -33,8 +33,23 @@ class EnvelopeSettings with ChangeNotifier {
   void update() {
     notifyListeners();
   }
+
+  void reset() {
+    attack.reset();
+    sustain.reset();
+    punch.reset();
+    decay.reset();
+  }
+
+  void defaults() {
+    attack.value = 0.0;
+    sustain.value = 0.3;
+    punch.value = 0.0;
+    decay.value = 0.4;
+  }
 }
 
+// Tone
 class FrequencySettings with ChangeNotifier {
   final String title = "Frequency";
 
@@ -57,8 +72,23 @@ class FrequencySettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    frequency.reset();
+    minCutoff.reset();
+    slide.reset();
+    deltaSlide.reset();
+  }
+
+  void defaults() {
+    frequency.value = 0.3;
+    minCutoff.value = 0.0;
+    slide.value = 0.0;
+    deltaSlide.value = 0.0;
+  }
 }
 
+// Vibrato
 class VibratoSettings with ChangeNotifier {
   final String title = "Vibrato";
   final Field depth = Field(0.0, 1.0, 0.0, "Depth");
@@ -78,8 +108,19 @@ class VibratoSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    depth.reset();
+    speed.reset();
+  }
+
+  void defaults() {
+    depth.value = 0.0; // Strength
+    speed.value = 0.0;
+  }
 }
 
+// Tonal change
 class ArpeggiationSettings with ChangeNotifier {
   final String title = "Arpeggiation";
   final Field multiplier = Field(-1.0, 1.0, 0.0, "Multiplier");
@@ -99,8 +140,19 @@ class ArpeggiationSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    multiplier.reset();
+    speed.reset();
+  }
+
+  void defaults() {
+    multiplier.value = 0.0; // Mod
+    speed.value = 0.0;
+  }
 }
 
+// Square wave duty (proportion of time signal is high vs. low)
 class DutyCycleSettings with ChangeNotifier {
   final String title = "DutyCycle";
   final Field dutyCycle = Field(0.0, 1.0, 0.0, "DutyCycle");
@@ -120,8 +172,20 @@ class DutyCycleSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    dutyCycle.reset();
+    sweep.reset();
+  }
+
+  void defaults() {
+    // Square wave duty (proportion of time signal is high vs. low)
+    dutyCycle.value = 0.5; // Square duty
+    sweep.value = 0.0; // Ramp
+  }
 }
 
+// Repeat
 class RetriggerSettings with ChangeNotifier {
   final String title = "Retrigger";
   final Field rate = Field(0.0, 0.96, 0.0, "Rate");
@@ -140,8 +204,17 @@ class RetriggerSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    rate.reset();
+  }
+
+  void defaults() {
+    rate.value = 0.0; // Repeat speed
+  }
 }
 
+// Flanger
 class FlangerSettings with ChangeNotifier {
   final String title = "Flanger";
   final Field offset = Field(-1.0, 1.0, 0.0, "Offset");
@@ -161,8 +234,19 @@ class FlangerSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    offset.reset();
+    sweep.reset();
+  }
+
+  void defaults() {
+    offset.value = 0.0; // Phase offset
+    sweep.value = 0.0; // Phase ramp
+  }
 }
 
+// Low-pass filter
 class LowPassFilterSettings with ChangeNotifier {
   final String title = "LowPass Filter";
   final Field cutoffFreq = Field(0.0, 1.0, 0.0, "Cutoff Freq");
@@ -183,8 +267,21 @@ class LowPassFilterSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    cutoffFreq.reset();
+    cutoffSweep.reset();
+    resonance.reset();
+  }
+
+  void defaults() {
+    cutoffFreq.value = 0.0;
+    cutoffSweep.value = 0.0;
+    resonance.value = 0.0;
+  }
 }
 
+// High-pass filter
 class HighPassFilterSettings with ChangeNotifier {
   final String title = "HighPass Filter";
   final Field cutoffFreq = Field(0.0, 1.0, 0.0, "Cutoff Freq");
@@ -203,6 +300,16 @@ class HighPassFilterSettings with ChangeNotifier {
   void collapsed() {
     _isExpanded = false;
     notifyListeners();
+  }
+
+  void reset() {
+    cutoffFreq.reset();
+    cutoffSweep.reset();
+  }
+
+  void defaults() {
+    cutoffFreq.value = 0.0;
+    cutoffSweep.value = 0.0;
   }
 }
 
@@ -223,6 +330,10 @@ class SampleRateSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    rate.reset();
+  }
 }
 
 class SampleSizeSettings with ChangeNotifier {
@@ -241,6 +352,10 @@ class SampleSizeSettings with ChangeNotifier {
   void collapsed() {
     _isExpanded = false;
     notifyListeners();
+  }
+
+  void reset() {
+    size.reset();
   }
 }
 
@@ -266,6 +381,10 @@ class GeneratorSettings with ChangeNotifier {
     type.update();
     notifyListeners();
   }
+
+  void reset() {
+    type.reset();
+  }
 }
 
 class WaveformSettings with ChangeNotifier {
@@ -285,6 +404,10 @@ class WaveformSettings with ChangeNotifier {
     _isExpanded = false;
     notifyListeners();
   }
+
+  void reset() {
+    type.reset();
+  }
 }
 
 class AppSettings {
@@ -303,6 +426,24 @@ class AppSettings {
     name.update();
     generatorSettings.update();
   }
+
+  void reset() {
+    name.reset();
+    sfxrFile.reset();
+    waveFile.reset();
+    destEmail.reset();
+    autoplay.reset();
+    sampleRateSettings.reset();
+    sampleSizeSettings.reset();
+    volume.reset();
+    generatorSettings.reset();
+    waveformSettings.reset();
+  }
+
+  void defaults() {
+    sampleRateSettings.rate.value = SampleRate.kHz44;
+    sampleSizeSettings.size.value = SampleSize.bits8;
+  }
 }
 
 class SettingsModel with ChangeNotifier {
@@ -317,13 +458,42 @@ class SettingsModel with ChangeNotifier {
   final highPassFilterSettings = HighPassFilterSettings();
   final envelopeSettings = EnvelopeSettings();
 
+  List<double> noiseBuffer = [];
+
+  String? downloadName;
+
   // Note: these update methods are really not needed.
   // TODO remove
   void update() {
     appSettings.update();
   }
 
-  String? downloadName;
+  void reset() {
+    appSettings.reset();
+    envelopeSettings.reset();
+    frequencySettings.reset();
+    vibratoSettings.reset();
+    arpeggiationSettings.reset();
+    dutyCycleSettings.reset();
+    retriggerSettings.reset();
+    flangerSettings.reset();
+    lowPassFilterSettings.reset();
+    highPassFilterSettings.reset();
+  }
+
+  // A basic preset
+  void defaults() {
+    appSettings.defaults();
+    envelopeSettings.defaults();
+    frequencySettings.defaults();
+    vibratoSettings.defaults();
+    arpeggiationSettings.defaults();
+    dutyCycleSettings.defaults();
+    retriggerSettings.defaults();
+    flangerSettings.defaults();
+    lowPassFilterSettings.defaults();
+    highPassFilterSettings.defaults();
+  }
 
   String toJson() {
     String json = """
@@ -356,7 +526,9 @@ class SettingsModel with ChangeNotifier {
   "WaveShape": "${_waveToString(appSettings.waveformSettings.type.value)}",
   "SampleRate": "${_rateToString(appSettings.sampleRateSettings.rate.value)}",
   "SampleSize": "${_sizeToString(appSettings.sampleSizeSettings.size.value)}",
-  "SoundVolume": ${appSettings.volume.value}
+  "SoundVolume": ${appSettings.volume.value},
+  "NoiseType": "white",
+  "NoiseData": []
 }
 """;
 

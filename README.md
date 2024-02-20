@@ -1,9 +1,7 @@
 # RetroVibratoWeb
-A web version RetroVibrato that it in turn is based off of sfrxr.js
+A web version RetroVibrato that it in turn is based off of [jsfxr](https://sfxr.me/).
 
-Rev 1
-
-![RetroVibratoWeb_P1 gif](retrovibratoweb_p1.gif)
+This app generates arcade sounds from the 70s and 80s. 
 
 Rev 2
 
@@ -48,6 +46,8 @@ The fix for Random would be to check what the range is and use that instead of h
 - About
 
 # Tasks
+*Left off at ...*
+
 - ☑ Settings sliders
 - ☑ State management. Used Provider
 - ☑ Load json and updating GUI
@@ -62,5 +62,17 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☒ Saving wave file via download
 - ☒ Add Help popup
 
+# Audio
+
+[Just Audio package](https://pub.dev/documentation/just_audio/latest/)
+
 https://pub.dev/packages/audiofileplayer
 audiofileplayer 2.0.1
+
+
+## Just Audio package
+https://stackoverflow.com/questions/67078045/flutter-just-audio-package-how-play-audio-from-bytes
+
+Streaming audio in Flutter with Just Audio (unfortunately it is behind medium's paywal)
+- [Part 1](https://suragch.medium.com/playing-short-audio-clips-in-flutter-with-just-audio-3c80eb7eb6ea)
+- [Part 2](https://suragch.medium.com/steaming-audio-in-flutter-with-just-audio-7435fcf672bf)
