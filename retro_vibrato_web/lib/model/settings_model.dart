@@ -82,9 +82,9 @@ class FrequencySettings with ChangeNotifier {
 
   void defaults() {
     frequency.value = 0.3;
-    minCutoff.value = 0.0;
-    slide.value = 0.0;
-    deltaSlide.value = 0.0;
+    minCutoff.value = 0.0; // Limit
+    slide.value = 0.0; // Ramp
+    deltaSlide.value = 0.0; // Delta ramp
   }
 }
 
@@ -275,9 +275,9 @@ class LowPassFilterSettings with ChangeNotifier {
   }
 
   void defaults() {
-    cutoffFreq.value = 0.0;
+    cutoffFreq.value = 1.0;
     cutoffSweep.value = 0.0;
-    resonance.value = 0.0;
+    resonance.value = 0.035;
   }
 }
 
@@ -334,6 +334,10 @@ class SampleRateSettings with ChangeNotifier {
   void reset() {
     rate.reset();
   }
+
+  void defaults() {
+    rate.value = SampleRate.kHz44;
+  }
 }
 
 class SampleSizeSettings with ChangeNotifier {
@@ -356,6 +360,10 @@ class SampleSizeSettings with ChangeNotifier {
 
   void reset() {
     size.reset();
+  }
+
+  void defaults() {
+    size.value = SampleSize.bits8;
   }
 }
 
@@ -408,6 +416,10 @@ class WaveformSettings with ChangeNotifier {
   void reset() {
     type.reset();
   }
+
+  void defaults() {
+    type.value = WaveForm.square;
+  }
 }
 
 class AppSettings {
@@ -418,7 +430,7 @@ class AppSettings {
   final Field autoplay = Field.noRange(true, "Auto Play");
   final sampleRateSettings = SampleRateSettings();
   final sampleSizeSettings = SampleSizeSettings();
-  final Field volume = Field.noRange(0.5, "Volume");
+  final Field volume = Field.noRange(0.25, "Volume");
   final generatorSettings = GeneratorSettings();
   final waveformSettings = WaveformSettings();
 
@@ -441,8 +453,9 @@ class AppSettings {
   }
 
   void defaults() {
-    sampleRateSettings.rate.value = SampleRate.kHz44;
-    sampleSizeSettings.size.value = SampleSize.bits8;
+    sampleRateSettings.defaults();
+    sampleSizeSettings.defaults();
+    waveformSettings.defaults();
   }
 }
 
@@ -748,6 +761,21 @@ class SettingsModel with ChangeNotifier {
     }
   }
 
+  static int sampleRateToInt(AppSettings settings) {
+    switch (settings.sampleRateSettings.rate.value) {
+      case SampleRate.kHz44:
+        return 44100;
+      case SampleRate.kHz22:
+        return 22000;
+      case SampleRate.kHz11:
+        return 11000;
+      case SampleRate.kHz55:
+        return 5500; // 5.5KHz
+      default:
+        return 0;
+    }
+  }
+
   String _sizeToString(SampleSize size) {
     switch (size) {
       case SampleSize.bits16:
@@ -756,6 +784,17 @@ class SettingsModel with ChangeNotifier {
         return "bits8";
       default:
         return "none";
+    }
+  }
+
+  static int sampleSizeToInt(AppSettings settings) {
+    switch (settings.sampleSizeSettings.size.value) {
+      case SampleSize.bits16:
+        return 16;
+      case SampleSize.bits8:
+        return 8;
+      default:
+        return 0;
     }
   }
 

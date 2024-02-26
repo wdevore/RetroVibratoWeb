@@ -5,15 +5,20 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:retro_vibrato_web/configurations.dart';
+import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
+import 'package:retro_vibrato_web/wave.dart';
 
 class DrawerIOExpansionPanel extends StatefulWidget {
   const DrawerIOExpansionPanel({
     super.key,
     required this.settings,
+    required this.conf,
   });
 
   final SettingsModel settings;
+  final Configurations conf;
 
   @override
   DrawerIOExpansionPanelState createState() => DrawerIOExpansionPanelState();
@@ -103,8 +108,8 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                         fontSize: 20,
                       )),
                   onTap: () {
-                    // Update the state of the app
-                    // ...
+                    // Convert samples to Wave file
+                    _saveWave(widget.conf);
                     // Then close the drawer
                     Navigator.pop(context);
                   },
@@ -121,9 +126,6 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                       )),
                   onTap: () async {
                     await _openSfxr();
-                    // TODO Update call isn't really needed
-                    // widget.settings.update();
-
                     // Then close the drawer
                     // Navigator.pop(context);
                   },
@@ -149,6 +151,38 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
         ),
       ],
     );
+  }
+
+  void _saveWave(Configurations conf) {
+    // audio/wave;base64,${content.toString('base64')
+    // Create the link with the file
+    // formatted as Riffwave
+    // conf.pickUpOrCoin(true);
+    conf.tone(440, WaveForm.sine);
+    conf.mutate();
+    conf.config(); // init() and initForRepeat()
+    conf.generate(); // = getRawBuffer
+
+    Wave wave = Wave();
+    wave.init(conf);
+    wave.make(conf.ga.buffer);
+
+    String wavBase64 = wave.wavToURI();
+
+    final anchor = AnchorElement(href: wavBase64)..target = 'blank';
+
+    // add the name
+    String name = widget.settings.downloadName ?? 'noName.wav';
+    if (!name.contains('.wav')) {
+      name += '.wav';
+    }
+
+    anchor.download = name;
+    document.body!.append(anchor);
+
+    // trigger download
+    anchor.click();
+    anchor.remove();
   }
 
   void _saveSfxr() {

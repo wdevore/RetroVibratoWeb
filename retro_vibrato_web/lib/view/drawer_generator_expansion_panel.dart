@@ -58,6 +58,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.pickUp;
+                    configurations.pickUpOrCoin(true);
+                    configurations.config();
+                    configurations.generate();
+                    // TODO stream or save samples.
+                    // Save as wave for testing
                   },
                 ),
                 TextButton(

@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
@@ -20,6 +22,9 @@ class GeneratorAlgorithm {
   static const envelopeDecay = 2;
   // Release part of envelope
   static const envelopeRelease = 3;
+
+  double baseFreq = 0.0;
+  double freqLimit = 0.0;
 
   List<int> envelopeLength = [];
   double envelopePunch = 0;
@@ -61,12 +66,17 @@ class GeneratorAlgorithm {
   double flangerOffset = 0.0;
   double flangerOffsetSlide = 0.0;
 
-  List<double> samples = [];
+  int sampleRate = 0;
+  SampleSize bitsPerChannel = SampleSize.bits8;
+
+  int numClipped = 0;
+  List<int> buffer = [];
+  List<double> normalized = [];
 
   void setSubsectionP(SettingsModel settings) {
     var frequencySettings = settings.frequencySettings;
-    var baseFreq = frequencySettings.frequency.value;
-    var freqLimit = frequencySettings.minCutoff.value;
+    baseFreq = frequencySettings.frequency.value;
+    freqLimit = frequencySettings.minCutoff.value; // Example: Laser shoot
 
     period = 100.0 / (baseFreq * baseFreq + 0.001);
 
@@ -94,7 +104,7 @@ class GeneratorAlgorithm {
     }
 
     var arpSpeed = settings.arpeggiationSettings.speed.value;
-    arpeggioTime = ((pow(1 - arpSpeed, 2) * 20000 + 32).floor()).toInt();
+    arpeggioTime = (pow(1 - arpSpeed, 2) * 20000 + 32).floor();
     if (arpSpeed == 1) {
       arpeggioTime = 0;
     }
@@ -102,30 +112,58 @@ class GeneratorAlgorithm {
 
   void setSubsectionS(SettingsModel settings) {
     var repeatSpeed = settings.retriggerSettings.rate.value;
-    repeatTime = ((pow(1.0 - repeatSpeed, 2.0) * 20000.0).floor()).toInt() + 32;
     if (repeatSpeed == 0.0) {
       repeatTime = 0;
+    } else {
+      repeatTime =
+          ((pow(1.0 - repeatSpeed, 2.0) * 20000.0).floor()).toInt() + 32;
     }
   }
 
-  void setSubsectionL(SettingsModel settings) {
-    var lowPassFreq = settings.lowPassFilterSettings.cutoffFreq.value;
+  void setSubsectionL(LowPassFilterSettings settings) {
+    var lowPassFreq = settings.cutoffFreq.value;
     enableLowPassFilter = lowPassFreq != 1.0;
   }
 
+  // Only called during "t" looping
   void initForRepeat(SettingsModel settings) {
     elapsedSinceRepeat = 0;
 
     setSubsectionP(settings); // Period
     setSubsectionD(settings); // Duty
     setSubsectionA(settings); // Arpeggio
-    setSubsectionS(settings); // Repeat
-    setSubsectionL(settings); // Low pass
   }
 
-  void setForRepeat(SettingsModel settings) {
-    elapsedSinceRepeat = 0;
+  void init(SettingsModel settings) {
+    initForRepeat(settings);
 
+    prevWaveShape = waveShape;
+    waveShape = settings.appSettings.waveformSettings.type.value;
+
+    // Filter
+    var lpfSettings = settings.lowPassFilterSettings;
+    setSubsectionL(settings.lowPassFilterSettings);
+
+    fltw = pow(lpfSettings.cutoffFreq.value, 3.0) * 0.1;
+
+    fltwD = 1.0 + lpfSettings.cutoffSweep.value * 0.0001;
+    fltdmp = 5.0 /
+        (1.0 + pow(lpfSettings.resonance.value, 2.0) * 20.0) *
+        (0.01 + fltw);
+    if (fltdmp > 0.8) {
+      fltdmp = 0.8;
+    }
+
+    var hpfSettings = settings.highPassFilterSettings;
+    flthp = pow(hpfSettings.cutoffFreq.value, 2.0) * 0.1;
+    flthpD = 1.0 + hpfSettings.cutoffSweep.value * 0.0003;
+
+    // Vibrato
+    var vibratoSettings = settings.vibratoSettings;
+    vibratoSpeed = pow(vibratoSettings.speed.value, 2.0) * 0.01;
+    vibratoAmplitude = vibratoSettings.depth.value * 0.5; // Strength
+
+    // Envelope
     var attack = settings.envelopeSettings.attack;
     var sustain = settings.envelopeSettings.sustain;
     var decay = settings.envelopeSettings.decay;
@@ -137,18 +175,6 @@ class GeneratorAlgorithm {
     ]);
 
     envelopePunch = settings.envelopeSettings.punch.value;
-
-    prevWaveShape = waveShape;
-    waveShape = settings.appSettings.waveformSettings.type.value;
-
-    setSubsectionP(settings);
-    setSubsectionD(settings);
-    setSubsectionA(settings);
-
-    // Vibrato
-    var vibratoSettings = settings.vibratoSettings;
-    vibratoSpeed = pow(vibratoSettings.speed.value, 2.0) * 0.01;
-    vibratoAmplitude = vibratoSettings.depth.value * 0.5; // Strength
 
     // Flanger
     var flangerSettings = settings.flangerSettings;
@@ -162,30 +188,24 @@ class GeneratorAlgorithm {
       flangerOffsetSlide = -flangerOffsetSlide;
     }
 
-    // Filter
-    var lpfSettings = settings.lowPassFilterSettings;
-    fltw = pow(lpfSettings.cutoffFreq.value, 3.0) * 0.1;
-    enableLowPassFilter = lpfSettings.cutoffFreq.value != 1.0;
-    fltwD = 1.0 + lpfSettings.cutoffSweep.value * 0.0001;
-    fltdmp = 5.0 /
-        (1.0 + pow(lpfSettings.resonance.value, 2.0) * 20.0) *
-        (0.01 + fltw);
-    if (fltdmp > 0.8) {
-      fltdmp = 0.8;
-    }
+    setSubsectionS(settings); // Repeat
 
-    var hpfSettings = settings.highPassFilterSettings;
-    flthp = pow(hpfSettings.cutoffFreq.value, 2.0) * 0.1;
-    flthpD = 1.0 + hpfSettings.cutoffSweep.value * 0.0003;
+    // Gain
+    // gain = Math.exp(ps.sound_vol) - 1;
+
+    // Misc
+    sampleRate = SettingsModel.sampleRateToInt(settings.appSettings);
+    bitsPerChannel = settings.appSettings.sampleSizeSettings.size.value;
   }
 
   void generate(SettingsModel settings) {
+    buffer.clear();
+    normalized.clear();
+
     var noise = settings.noiseBuffer;
     final volume = settings.appSettings.volume.value;
 
-    initForRepeat(settings);
-
-    // If the noise buffer is empty or the wave shape has changed to noise
+    // If the noise buffer is empty or the wave shape has changed.
     // then build a noise buffer that can be blended in.
     if (waveShape != prevWaveShape || noise.isEmpty) {
       if (waveShape == WaveForm.whiteNoise ||
@@ -194,8 +214,8 @@ class GeneratorAlgorithm {
         noise = generateNoise(waveShape);
         settings.noiseBuffer = noise;
       } else {
-        noise = []; // Clear buffer
-        settings.noiseBuffer = [];
+        noise.clear(); // Clear buffer
+        settings.noiseBuffer.clear();
       }
     }
 
@@ -210,12 +230,16 @@ class GeneratorAlgorithm {
     final flangerBuffer = List<double>.filled(flangerBufferSize, 0.0);
     double sampleSum = 0.0;
     int numSummed = 0;
-    int sampleRate = settings.appSettings.sampleRateSettings.rate.value;
     int summands = ((44100.0 / (sampleRate).toDouble()).floor()).toInt();
+
+    ByteBuffer byteBuffer = Uint8List(4).buffer;
+    ByteData byteData = ByteData.view(byteBuffer);
 
     for (var t = 0;; t++) {
       elapsedSinceRepeat++;
-
+      // if (t == 1915) {
+      //   debugPrint('t: $t');
+      // }
       if (repeatTime != 0 && elapsedSinceRepeat >= repeatTime) {
         initForRepeat(settings);
       }
@@ -273,24 +297,25 @@ class GeneratorAlgorithm {
       }
 
       double envelopeVolume = 0.0;
-      if (envelopeLength[envelopeStage] != 0) {
-        envelopeVolume = envelopeElapsed.toDouble() /
-            envelopeLength[envelopeStage].toDouble(); // Envelope Attack
+      double envf = 0.1;
+      if (envelopeLength[envelopeStage] != 0.0) {
+        envf = envelopeElapsed.toDouble() /
+            envelopeLength[envelopeStage].toDouble();
       }
 
       switch (envelopeStage) {
         case envelopeAttack:
+          envelopeVolume = envf;
         case envelopeSustain:
-          envelopeVolume = 1.0 + (1.0 - envelopeVolume) * 2.0 * envelopePunch;
+          envelopeVolume = 1.0 + (1.0 - envf) * 2.0 * envelopePunch;
         case envelopeDecay:
-          envelopeVolume = 1.0 - envelopeVolume;
+          envelopeVolume = 1.0 - envf;
       }
 
       // -----------------------------
       // Flanger step
       // -----------------------------
       flangerOffset += flangerOffsetSlide;
-      flangerOffset.floor().abs().toInt();
       int iPhase = flangerOffset.floor().abs().toInt();
       if (iPhase > flangerBufferSize - 1) {
         iPhase = flangerBufferSize - 1;
@@ -405,15 +430,59 @@ class GeneratorAlgorithm {
       sample = sample / standardOverSamplings.toDouble(); // * MASTER_VOLUME;
       sample *= volume;
 
-      // if sample < -1 {
-      // 	sample = -1
-      // }
-      // if sample > 1 {
-      // 	sample = 1
-      // }
-      // fmt.Println(sample)
-      samples.add(sample);
+      // Capture the original normalized floating point sample
+      normalized.add(sample);
+
+      // Bits per channel (rescale)
+      if (bitsPerChannel == SampleSize.bits8) {
+        // Rescale [-1, 1) to [0, 256)
+        sample = ((sample + 1) * 128.0).floorToDouble();
+        if (sample > 255) {
+          sample = 255;
+          ++numClipped;
+        } else if (sample < 0) {
+          sample = 0;
+          ++numClipped;
+        }
+        buffer.add(sample.toInt());
+      } else {
+        // 16 bits
+        // Rescale [-1, 1) to [-32768, 32768)
+        sample = (sample * (1 << 15)).floorToDouble();
+        if (sample >= (1 << 15)) {
+          sample = (1 << 15) - 1.0;
+          ++numClipped;
+        } else if (sample < -(1 << 15)) {
+          sample = (-(1 << 15)).toDouble();
+          ++numClipped;
+        }
+
+        // TODO fix this it may be wrong
+        // Convert sample to 16 bit int
+        Uint32List list = doubleTo32List(sample, byteData, byteBuffer);
+        // We only want 2 bytes because the sample size is 2 bytes.
+        // The other two bytes should be zero.
+        buffer.addAll(list.getRange(0, 2));
+        // buffer.add(sample & 0xFF); // Add LSB first
+        // buffer.add((sample >> 8) & 0xFF); // MSB last
+      }
     }
+  }
+
+  Uint32List doubleTo32List(
+      double sample, ByteData byteData, ByteBuffer buffer) {
+    // A big-endian system stores the most significant byte
+    // of a word at the smallest memory address and the
+    // least significant byte at the largest.
+    // A little-endian system, in contrast,
+    // stores the least-significant byte at the smallest address.
+    // Index  Byte     Little   Big
+    // 0      00       LSB      MSB
+    // 1      00
+    // 2      00
+    // 3      00       MSB      LSB
+    byteData.setFloat32(0, sample, Endian.little);
+    return buffer.asUint32List();
   }
 
   List<double> generateNoise(WaveForm shape) {

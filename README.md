@@ -63,16 +63,28 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☒ Add Help popup
 
 # Audio
-
-[Just Audio package](https://pub.dev/documentation/just_audio/latest/)
+mime types:
+- https://github.com/higuma/web-audio-recorder-js
+- https://mimetype.io/audio/wav
 
 https://pub.dev/packages/audiofileplayer
 audiofileplayer 2.0.1
 
 
 ## Just Audio package
+[Just Audio package](https://pub.dev/documentation/just_audio/latest/)
+
 https://stackoverflow.com/questions/67078045/flutter-just-audio-package-how-play-audio-from-bytes
 
 Streaming audio in Flutter with Just Audio (unfortunately it is behind medium's paywal)
 - [Part 1](https://suragch.medium.com/playing-short-audio-clips-in-flutter-with-just-audio-3c80eb7eb6ea)
 - [Part 2](https://suragch.medium.com/steaming-audio-in-flutter-with-just-audio-7435fcf672bf)
+
+### Notes
+```
+  ByteBuffer buffer = Uint8List(8).buffer;
+  ByteData bdata = ByteData.view(buffer);
+  bdata.setFloat32(0, 3.04);
+  int huh = bdata.getInt32(0);
+```
+MasterVolume = 1

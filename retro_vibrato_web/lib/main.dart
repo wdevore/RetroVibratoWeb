@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/configurations.dart';
+import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
@@ -19,10 +20,29 @@ import 'package:retro_vibrato_web/view/sample_rate.dart';
 import 'package:retro_vibrato_web/view/sample_size.dart';
 import 'package:retro_vibrato_web/view/settings_slider.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
+import 'package:retro_vibrato_web/wave.dart';
 
-SettingsModel _settings = SettingsModel();
+final SettingsModel _settings = SettingsModel();
+final Configurations _conf = Configurations(_settings);
 
+// UI gen
+//   pickUpCoin
+// UI updateUI
+// UI play
+//   SoundEffect constructor
+//     SoundEffect.init            ---|
+//       SoundEffect.initForRepeat ---| config
+//   SoundEffect.generate
+//     SoundEffect.getRawBuffer
 void main() {
+  // _conf.tone(440, WaveForm.sine);
+  // _conf.config(); // init() and initForRepeat()
+  // _conf.generate(); // = getRawBuffer
+  // Wave wave = Wave();
+  // wave.init(_conf);
+  // wave.make(_conf.ga.buffer);
+  // String uri = wave.wavToURI();
+
   runApp(const MainApp());
 }
 
@@ -179,7 +199,10 @@ class FSfxrHomePage extends StatelessWidget {
                 flex: 3,
               ),
             ),
-            DrawerIOExpansionPanel(settings: _settings),
+            DrawerIOExpansionPanel(
+              settings: _settings,
+              conf: _conf,
+            ),
             MultiProvider(
               providers: [
                 ChangeNotifierProvider.value(

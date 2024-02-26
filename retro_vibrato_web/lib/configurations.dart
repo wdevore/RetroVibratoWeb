@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/foundation.dart';
 import 'package:retro_vibrato_web/generator_algorithm.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
@@ -20,8 +19,13 @@ class Configurations {
 
   Configurations(this.settings);
 
-  void init() {
-    settings.defaults();
+  void generate() {
+    ga.generate(settings);
+  }
+
+  void config() {
+    // ga.initForRepeat(settings);
+    ga.init(settings);
   }
 
   void mutate() {
@@ -107,10 +111,16 @@ class Configurations {
     }
   }
 
-  void pickUPOrCoin(bool withArp) {
+  void pickUpOrCoin(bool withArp) {
     settings.defaults();
 
-    settings.appSettings.waveformSettings.type.value = WaveForm.sine;
+    if (Random().nextDouble() > 0.5) {
+      settings.appSettings.waveformSettings.type.value =
+          WaveForm.sawtoothRising;
+    } else {
+      settings.appSettings.waveformSettings.type.value =
+          WaveForm.sawtoothFalling;
+    }
 
     // Base freq
     settings.frequencySettings.frequency.value =
