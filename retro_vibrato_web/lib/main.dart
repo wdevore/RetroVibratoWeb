@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mp_audio_stream/mp_audio_stream.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/configurations.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
@@ -24,6 +25,7 @@ import 'package:retro_vibrato_web/wave.dart';
 
 final SettingsModel _settings = SettingsModel();
 final Configurations _conf = Configurations(_settings);
+final AudioStream _audioStream = getAudioStream();
 
 // UI gen
 //   pickUpCoin
@@ -35,14 +37,6 @@ final Configurations _conf = Configurations(_settings);
 //   SoundEffect.generate
 //     SoundEffect.getRawBuffer
 void main() {
-  // _conf.tone(440, WaveForm.sine);
-  // _conf.config(); // init() and initForRepeat()
-  // _conf.generate(); // = getRawBuffer
-  // Wave wave = Wave();
-  // wave.init(_conf);
-  // wave.make(_conf.ga.buffer);
-  // String uri = wave.wavToURI();
-
   runApp(const MainApp());
 }
 
@@ -85,50 +79,54 @@ class FSfxrHomePage extends StatelessWidget {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-        backgroundColor: Colors.grey[600],
-        appBar: _buildAppBar(context, title),
-        drawer: _buildDrawer(context),
-        body: ListView(children: [
-          ChangeNotifierProvider.value(
-            value: _settings.envelopeSettings,
-            child: const EnvelopeExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.frequencySettings,
-            child: const FrequencyExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.vibratoSettings,
-            child: const VibratoExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.arpeggiationSettings,
-            child: const ArpeggiationExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.dutyCycleSettings,
-            child: const DutyCycleExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.retriggerSettings,
-            child: const RetriggerExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.flangerSettings,
-            child: const FlangerExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.lowPassFilterSettings,
-            child: const LowPassFilterExpansionPanelList(),
-          ),
-          ChangeNotifierProvider.value(
-            value: _settings.highPassFilterSettings,
-            child: const HighPassFilterExpansionPanelList(),
-          ),
-        ]),
-        // Place play button in the top right corner
-        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-        floatingActionButton: const PlayButtonStatelessWidget());
+      backgroundColor: Colors.grey[600],
+      appBar: _buildAppBar(context, title),
+      drawer: _buildDrawer(context),
+      body: ListView(children: [
+        ChangeNotifierProvider.value(
+          value: _settings.envelopeSettings,
+          child: const EnvelopeExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.frequencySettings,
+          child: const FrequencyExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.vibratoSettings,
+          child: const VibratoExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.arpeggiationSettings,
+          child: const ArpeggiationExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.dutyCycleSettings,
+          child: const DutyCycleExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.retriggerSettings,
+          child: const RetriggerExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.flangerSettings,
+          child: const FlangerExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.lowPassFilterSettings,
+          child: const LowPassFilterExpansionPanelList(),
+        ),
+        ChangeNotifierProvider.value(
+          value: _settings.highPassFilterSettings,
+          child: const HighPassFilterExpansionPanelList(),
+        ),
+      ]),
+      // Place play button in the top right corner
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: PlayButtonStatelessWidget(
+        conf: _conf,
+        audioStream: _audioStream,
+      ),
+    );
   }
 
   // Basic title bar

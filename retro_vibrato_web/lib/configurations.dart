@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:retro_vibrato_web/generator_algorithm.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
+import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
 // Technically the values generated are meaningless to a user
@@ -28,86 +29,91 @@ class Configurations {
     ga.init(settings);
   }
 
+  double clamp(Field f, double rand) {
+    double v = f.value + rand;
+    return v.clamp(f.min, f.max);
+  }
+
   void mutate() {
     var freqSettings = settings.frequencySettings;
     if (Random().nextDouble() > 0.5) {
-      freqSettings.frequency.value += Random().nextDouble() * 0.1 - 0.05;
+      freqSettings.frequency.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      freqSettings.slide.value += Random().nextDouble() * 0.1 - 0.05;
+      freqSettings.slide.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      freqSettings.deltaSlide.value += Random().nextDouble() * 0.1 - 0.05;
+      freqSettings.deltaSlide.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var dutySettings = settings.dutyCycleSettings;
     if (Random().nextDouble() > 0.5) {
-      dutySettings.dutyCycle.value += Random().nextDouble() * 0.1 - 0.05;
+      dutySettings.dutyCycle.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      dutySettings.sweep.value += Random().nextDouble() * 0.1 - 0.05;
+      dutySettings.sweep.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var vibSettings = settings.vibratoSettings;
     if (Random().nextDouble() > 0.5) {
-      vibSettings.depth.value += Random().nextDouble() * 0.1 - 0.05;
+      vibSettings.depth.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      vibSettings.speed.value += Random().nextDouble() * 0.1 - 0.05;
+      vibSettings.speed.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var envSettings = settings.envelopeSettings;
     if (Random().nextDouble() > 0.5) {
-      envSettings.attack.value += Random().nextDouble() * 0.1 - 0.05;
+      envSettings.attack.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      envSettings.sustain.value += Random().nextDouble() * 0.1 - 0.05;
+      envSettings.sustain.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      envSettings.decay.value += Random().nextDouble() * 0.1 - 0.05;
+      envSettings.decay.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      envSettings.punch.value += Random().nextDouble() * 0.1 - 0.05;
+      envSettings.punch.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var lpfSettings = settings.lowPassFilterSettings;
     if (Random().nextDouble() > 0.5) {
-      lpfSettings.cutoffFreq.value += Random().nextDouble() * 0.1 - 0.05;
+      lpfSettings.cutoffFreq.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      lpfSettings.cutoffSweep.value += Random().nextDouble() * 0.1 - 0.05;
+      lpfSettings.cutoffSweep.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      lpfSettings.resonance.value += Random().nextDouble() * 0.1 - 0.05;
+      lpfSettings.resonance.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var hpfSettings = settings.highPassFilterSettings;
     if (Random().nextDouble() > 0.5) {
-      hpfSettings.cutoffFreq.value += Random().nextDouble() * 0.1 - 0.05;
+      hpfSettings.cutoffFreq.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      hpfSettings.cutoffSweep.value += Random().nextDouble() * 0.1 - 0.05;
+      hpfSettings.cutoffSweep.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var flaSettings = settings.flangerSettings;
     if (Random().nextDouble() > 0.5) {
-      flaSettings.offset.value += Random().nextDouble() * 0.1 - 0.05;
+      flaSettings.offset.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      flaSettings.sweep.value += Random().nextDouble() * 0.1 - 0.05;
+      flaSettings.sweep.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var repSettings = settings.retriggerSettings;
     if (Random().nextDouble() > 0.5) {
-      repSettings.rate.value += Random().nextDouble() * 0.1 - 0.05;
+      repSettings.rate.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
 
     var arpSettings = settings.arpeggiationSettings;
     if (Random().nextDouble() > 0.5) {
-      arpSettings.speed.value += Random().nextDouble() * 0.1 - 0.05;
+      arpSettings.speed.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
     if (Random().nextDouble() > 0.5) {
-      arpSettings.multiplier.value += Random().nextDouble() * 0.1 - 0.05;
+      arpSettings.multiplier.value.add(Random().nextDouble() * 0.1 - 0.05);
     }
   }
 

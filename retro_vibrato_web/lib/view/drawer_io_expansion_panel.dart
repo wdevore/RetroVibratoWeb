@@ -6,7 +6,6 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:retro_vibrato_web/configurations.dart';
-import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/wave.dart';
 
@@ -94,7 +93,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                   onTap: () {
                     // Save and close drawer
                     _saveSfxr();
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                 ),
               ),
@@ -111,7 +110,7 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
                     // Convert samples to Wave file
                     _saveWave(widget.conf);
                     // Then close the drawer
-                    Navigator.pop(context);
+                    // Navigator.pop(context);
                   },
                 ),
               ),
@@ -158,8 +157,8 @@ class DrawerIOExpansionPanelState extends State<DrawerIOExpansionPanel> {
     // Create the link with the file
     // formatted as Riffwave
     // conf.pickUpOrCoin(true);
-    conf.tone(440, WaveForm.sine);
-    conf.mutate();
+    // conf.tone(440, WaveForm.sine);
+    // conf.mutate();
     conf.config(); // init() and initForRepeat()
     conf.generate(); // = getRawBuffer
 

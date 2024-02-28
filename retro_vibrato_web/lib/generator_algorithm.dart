@@ -1,7 +1,6 @@
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 
@@ -430,7 +429,8 @@ class GeneratorAlgorithm {
       sample = sample / standardOverSamplings.toDouble(); // * MASTER_VOLUME;
       sample *= volume;
 
-      // Capture the original normalized floating point sample
+      // Capture the original normalized "[-1, 1)" floating point sample
+      // This used for audio players that can use raw data.
       normalized.add(sample);
 
       // Bits per channel (rescale)

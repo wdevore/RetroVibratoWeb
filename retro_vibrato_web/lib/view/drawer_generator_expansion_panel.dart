@@ -59,10 +59,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   onPressed: () {
                     gtype.value = Generator.pickUp;
                     configurations.pickUpOrCoin(true);
-                    configurations.config();
-                    configurations.generate();
-                    // TODO stream or save samples.
-                    // Save as wave for testing
+                    // TODO stream
                   },
                 ),
                 TextButton(
@@ -77,6 +74,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.laser;
+                    configurations.laserShoot();
                   },
                 ),
                 TextButton(
@@ -91,6 +89,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.explosion;
+                    configurations.explosion();
                   },
                 ),
                 TextButton(
@@ -105,6 +104,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.powerUp;
+                    configurations.powerUp();
                   },
                 ),
                 TextButton(
@@ -119,6 +119,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.hit;
+                    configurations.hitHurt();
                   },
                 ),
                 TextButton(
@@ -133,6 +134,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.blip;
+                    configurations.blipSelect();
                   },
                 ),
                 TextButton(
@@ -147,6 +149,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.synth;
+                    configurations.synth();
                   },
                 ),
                 TextButton(
@@ -161,6 +164,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.random;
+                    configurations.random();
                   },
                 ),
                 TextButton(
@@ -175,6 +179,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.tone;
+                    configurations.tone(440, WaveForm.sine);
                   },
                 ),
                 TextButton(
@@ -189,6 +194,7 @@ class GeneratorsSubPanel extends StatelessWidget {
                   ),
                   onPressed: () {
                     gtype.value = Generator.mutate;
+                    configurations.mutate();
                   },
                 ),
               ],

@@ -23,6 +23,11 @@ class Field with ChangeNotifier {
 
   dynamic get value => _value;
 
+  void add(double v) {
+    double d = _value + v;
+    _value = d.clamp(min, max);
+  }
+
   reset() {
     value = rValue;
     notifyListeners();

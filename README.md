@@ -7,7 +7,12 @@ Rev 2
 
 ![RetroVibratoWeb_P2 gif](retrovibratoweb_p2.gif)
 
-[RetroVi
+
+# Projection creation
+```sh
+flutter create --platforms web .
+```
+
 # Notes
 Some of the json files have what appear to be invalid values, for example, JettsonSaucer.json has negative envelope Attack and Decay but the range is from 0->1.
 
@@ -57,10 +62,11 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Add Wave form selector (under top)
 - ☑ Add volume slider (next)
 - ☑ Add SampleSize 
-- ☒ Porting generator algorithm from Ranger-Go-IGE
+- ☑ Saving wave file via download
+- ☑ Porting generator algorithm from Ranger-Go-IGE
 - ☒ Implement play button
-- ☒ Saving wave file via download
 - ☒ Add Help popup
+- ☒ Add exception handling
 
 # Audio
 mime types:
