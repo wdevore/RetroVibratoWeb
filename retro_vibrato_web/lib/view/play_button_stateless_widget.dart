@@ -8,12 +8,14 @@ class PlayButtonStatelessWidget extends StatelessWidget {
   final Configurations conf;
   final AudioStream audioStream;
 
-  const PlayButtonStatelessWidget({
+  PlayButtonStatelessWidget({
     super.key,
     required this.conf,
     required this.audioStream,
-  });
-//-0.0038050466614640635
+  }) {
+    audioStream.init(bufferMilliSec: 2000, waitingBufferMilliSec: 100);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,13 +25,19 @@ class PlayButtonStatelessWidget extends StatelessWidget {
       child: FloatingActionButton(
         onPressed: () {
           debugPrint('Play');
+          AudioStreamStat stat = audioStream.stat();
+          debugPrint('exhaust: ${stat.exhaust}, full: ${stat.full}');
+          // if (stat.full >= 0) {
+          //   return;
+          // }
+
           conf.config(); // init() and initForRepeat()
           conf.generate(); // = getRawBuffer
 
           // Convert normalized data to Float32List
           Float32List wave = Float32List.fromList(conf.ga.normalized);
 
-          audioStream.init(bufferMilliSec: 1000, waitingBufferMilliSec: 100);
+          // audioStream.init(bufferMilliSec: 2000, waitingBufferMilliSec: 100);
 
           // for web, calling `resume()` from user-action is needed
           audioStream.resume();

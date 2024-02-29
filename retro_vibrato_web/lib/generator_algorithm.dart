@@ -213,8 +213,10 @@ class GeneratorAlgorithm {
         noise = generateNoise(waveShape);
         settings.noiseBuffer = noise;
       } else {
-        noise.clear(); // Clear buffer
-        settings.noiseBuffer.clear();
+        noise = <double>[]; // Clear buffer
+        settings.noiseBuffer = <double>[];
+        // if (noise.isNotEmpty) noise.clear(); // Clear buffer
+        // if (settings.noiseBuffer.isNotEmpty) settings.noiseBuffer.clear();
       }
     }
 
