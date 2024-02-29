@@ -16,6 +16,7 @@ class GeneratorsSubPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<GeneratorSettings>();
+    const delay = 2000;
 
     return ExpansionPanelList(
       expandedHeaderPadding: EdgeInsets.zero,
@@ -57,9 +58,14 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.pickUp;
+                    // Note: We play the sound first so that it completes
+                    // before we set the gtype. The alternative is to
+                    // push the configuration calls into a coroutine.
                     configurations.pickUpOrCoin(true);
-                    // TODO stream
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.pickUp);
+                    // gtype.value = Generator.pickUp;
                   },
                 ),
                 TextButton(
@@ -73,8 +79,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.laser;
                     configurations.laserShoot();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.laser);
+                    // gtype.value = Generator.laser;
                   },
                 ),
                 TextButton(
@@ -88,8 +97,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.explosion;
                     configurations.explosion();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.explosion);
+                    // gtype.value = Generator.explosion;
                   },
                 ),
                 TextButton(
@@ -103,8 +115,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.powerUp;
                     configurations.powerUp();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.powerUp);
+                    // gtype.value = Generator.powerUp;
                   },
                 ),
                 TextButton(
@@ -118,8 +133,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.hit;
                     configurations.hitHurt();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.hit);
+                    // gtype.value = Generator.hit;
                   },
                 ),
                 TextButton(
@@ -133,8 +151,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.blip;
                     configurations.blipSelect();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.blip);
+                    // gtype.value = Generator.blip;
                   },
                 ),
                 TextButton(
@@ -148,8 +169,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.synth;
                     configurations.synth();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.synth);
+                    // gtype.value = Generator.synth;
                   },
                 ),
                 TextButton(
@@ -163,8 +187,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.random;
                     configurations.random();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.random);
+                    // gtype.value = Generator.random;
                   },
                 ),
                 TextButton(
@@ -178,8 +205,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.tone;
                     configurations.tone(440, WaveForm.sine);
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.tone);
+                    // gtype.value = Generator.tone;
                   },
                 ),
                 TextButton(
@@ -193,8 +223,11 @@ class GeneratorsSubPanel extends StatelessWidget {
                     ),
                   ),
                   onPressed: () {
-                    gtype.value = Generator.mutate;
                     configurations.mutate();
+                    configurations.play();
+                    Future.delayed(const Duration(milliseconds: delay))
+                        .then((value) => gtype.value = Generator.mutate);
+                    // gtype.value = Generator.mutate;
                   },
                 ),
               ],

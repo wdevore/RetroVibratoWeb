@@ -167,6 +167,7 @@ class GeneratorAlgorithm {
     var sustain = settings.envelopeSettings.sustain;
     var decay = settings.envelopeSettings.decay;
 
+    envelopeLength = [];
     envelopeLength.addAll([
       ((attack.value * attack.value * 100000.0).floor()).toInt(),
       ((sustain.value * sustain.value * 100000.0).floor()).toInt(),

@@ -17,7 +17,11 @@ class Field with ChangeNotifier {
   }
 
   set value(dynamic v) {
-    _value = v;
+    if (v is double) {
+      _value = v.clamp(min, max);
+    } else {
+      _value = v;
+    }
     notifyListeners();
   }
 

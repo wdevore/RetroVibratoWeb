@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mp_audio_stream/mp_audio_stream.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/configurations.dart';
-import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
@@ -21,11 +19,9 @@ import 'package:retro_vibrato_web/view/sample_rate.dart';
 import 'package:retro_vibrato_web/view/sample_size.dart';
 import 'package:retro_vibrato_web/view/settings_slider.dart';
 import 'package:retro_vibrato_web/view/vibrato_expansion_panel_list.dart';
-import 'package:retro_vibrato_web/wave.dart';
 
 final SettingsModel _settings = SettingsModel();
 final Configurations _conf = Configurations(_settings);
-final AudioStream _audioStream = getAudioStream();
 
 // UI gen
 //   pickUpCoin
@@ -124,7 +120,6 @@ class FSfxrHomePage extends StatelessWidget {
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
       floatingActionButton: PlayButtonStatelessWidget(
         conf: _conf,
-        audioStream: _audioStream,
       ),
     );
   }

@@ -1,5 +1,7 @@
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:mp_audio_stream/mp_audio_stream.dart';
 import 'package:retro_vibrato_web/generator_algorithm.dart';
 import 'package:retro_vibrato_web/model/enums.dart';
 import 'package:retro_vibrato_web/model/field.dart';
@@ -15,10 +17,13 @@ import 'package:retro_vibrato_web/model/settings_model.dart';
 class Configurations {
   final SettingsModel settings;
   final GeneratorAlgorithm ga = GeneratorAlgorithm();
+  final AudioStream _audioStream = getAudioStream();
 
   static const playbackSoundVolume = 0.1;
 
-  Configurations(this.settings);
+  Configurations(this.settings) {
+    _audioStream.init(bufferMilliSec: 3000, waitingBufferMilliSec: 100);
+  }
 
   void generate() {
     ga.generate(settings);
@@ -34,6 +39,23 @@ class Configurations {
     return v.clamp(f.min, f.max);
   }
 
+  void play() {
+    config(); // init() and initForRepeat()
+    generate(); // = getRawBuffer
+
+    // Convert normalized data to Float32List
+    Float32List wave = Float32List.fromList(ga.normalized);
+
+    // for web, calling `resume()` from user-action is needed
+    _audioStream.resume();
+
+    // Stream it
+    _audioStream.push(wave);
+  }
+
+  // --------------------------------------------------------
+  // Settings configurations
+  // --------------------------------------------------------
   void mutate() {
     var freqSettings = settings.frequencySettings;
     if (Random().nextDouble() > 0.5) {
@@ -153,7 +175,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     WaveForm shape = _generateRandomWaveNoNoise();
     appSettings.waveformSettings.type.value = shape;
@@ -215,7 +237,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     WaveForm shape = WaveForm.whiteNoise;
     appSettings.waveformSettings.type.value = shape;
@@ -274,7 +296,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     double chance = Random().nextDouble();
 
@@ -320,7 +342,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     WaveForm shape = _generateRandomWaveNoNoise();
     appSettings.waveformSettings.type.value = shape;
@@ -362,7 +384,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     appSettings.waveformSettings.type.value = WaveForm.square;
 
@@ -397,7 +419,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     WaveForm shape = _generateRandomWaveNoNoiseNoSaw();
     appSettings.waveformSettings.type.value = shape;
@@ -429,7 +451,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     WaveForm shape = _generateRandomWaveNoNoiseNoSaw();
     appSettings.waveformSettings.type.value = shape;
@@ -497,9 +519,9 @@ class Configurations {
   void random() {
     settings.defaults();
 
-    var appSettings = settings.appSettings;
+    // var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     // Base frequency
     var freqSettings = settings.frequencySettings;
@@ -583,7 +605,7 @@ class Configurations {
 
     var appSettings = settings.appSettings;
     // Damping volume in case this generates a loud sound
-    appSettings.volume.value = playbackSoundVolume;
+    // appSettings.volume.value = playbackSoundVolume;
 
     appSettings.sampleRateSettings.rate.value = SampleRate.kHz44;
     appSettings.sampleSizeSettings.size.value = SampleSize.bits8;
