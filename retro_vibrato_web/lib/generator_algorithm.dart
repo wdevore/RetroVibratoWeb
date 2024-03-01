@@ -447,7 +447,11 @@ class GeneratorAlgorithm {
           sample = 0;
           ++numClipped;
         }
-        buffer.add(sample.toInt());
+        if (!sample.isNaN) {
+          buffer.add(sample.toInt());
+        } else {
+          buffer.add(0);
+        }
       } else {
         // 16 bits
         // Rescale [-1, 1) to [-32768, 32768)
@@ -465,7 +469,11 @@ class GeneratorAlgorithm {
         Uint32List list = doubleTo32List(sample, byteData, byteBuffer);
         // We only want 2 bytes because the sample size is 2 bytes.
         // The other two bytes should be zero.
-        buffer.addAll(list.getRange(0, 2));
+        if (!sample.isNaN) {
+          buffer.addAll(list.getRange(0, 2));
+        } else {
+          buffer.add(0);
+        }
         // buffer.add(sample & 0xFF); // Add LSB first
         // buffer.add((sample >> 8) & 0xFF); // MSB last
       }

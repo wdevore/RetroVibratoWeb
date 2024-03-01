@@ -187,7 +187,9 @@ class FSfxrHomePage extends StatelessWidget {
                   value: _settings.appSettings.waveformSettings.type,
                 ),
               ],
-              child: const WaveformSubPanel(),
+              child: WaveformSubPanel(
+                configurations: _conf,
+              ),
             ),
             ChangeNotifierProvider.value(
               value: _settings.appSettings.volume,
