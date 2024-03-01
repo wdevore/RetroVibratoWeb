@@ -16,7 +16,6 @@ class GeneratorsSubPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<GeneratorSettings>();
-    const delay = 2000;
 
     return ExpansionPanelList(
       expandedHeaderPadding: EdgeInsets.zero,

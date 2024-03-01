@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:retro_vibrato_web/configurations.dart';
 import 'package:retro_vibrato_web/model/configuration_inherited_widget.dart';
 import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/view/custom_slider_thumb_rect.dart';
