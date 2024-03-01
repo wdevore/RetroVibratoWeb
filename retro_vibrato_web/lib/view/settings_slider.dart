@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:retro_vibrato_web/configurations.dart';
+import 'package:retro_vibrato_web/model/configuration_inherited_widget.dart';
 import 'package:retro_vibrato_web/model/field.dart';
 import 'package:retro_vibrato_web/view/custom_slider_thumb_rect.dart';
 
@@ -18,6 +20,7 @@ class SettingsSlider extends StatelessWidget {
     // final field = context.watch<Field>();
     // Instead of using "watch" above I used a
     // "Consumer" below.
+    ConfigurationWidget configWidget = ConfigurationWidget.of(context);
 
     return Consumer<Field>(
       builder: (_, field, __) => SizedBox(
@@ -72,7 +75,7 @@ class SettingsSlider extends StatelessWidget {
                   onChanged: (value) {
                     field.value = value;
                   },
-                  onChangeEnd: (value) => debugPrint("rel"),
+                  onChangeEnd: (value) => configWidget.config.aplay(),
                 ),
               ),
             ),

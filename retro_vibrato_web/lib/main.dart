@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:retro_vibrato_web/configurations.dart';
+import 'package:retro_vibrato_web/model/configuration_inherited_widget.dart';
 import 'package:retro_vibrato_web/model/settings_model.dart';
 import 'package:retro_vibrato_web/view/Arpeggiation_expansion_panel_list.dart';
 import 'package:retro_vibrato_web/view/DutyCycle_expansion_panel_list.dart';
@@ -74,52 +75,55 @@ class FSfxrHomePage extends StatelessWidget {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    return Scaffold(
-      backgroundColor: Colors.grey[600],
-      appBar: _buildAppBar(context, title),
-      drawer: _buildDrawer(context),
-      body: ListView(children: [
-        ChangeNotifierProvider.value(
-          value: _settings.envelopeSettings,
-          child: const EnvelopeExpansionPanelList(),
+    return ConfigurationWidget(
+      config: _conf,
+      child: Scaffold(
+        backgroundColor: Colors.grey[600],
+        appBar: _buildAppBar(context, title),
+        drawer: _buildDrawer(context),
+        body: ListView(children: [
+          ChangeNotifierProvider.value(
+            value: _settings.envelopeSettings,
+            child: const EnvelopeExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.frequencySettings,
+            child: const FrequencyExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.vibratoSettings,
+            child: const VibratoExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.arpeggiationSettings,
+            child: const ArpeggiationExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.dutyCycleSettings,
+            child: const DutyCycleExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.retriggerSettings,
+            child: const RetriggerExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.flangerSettings,
+            child: const FlangerExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.lowPassFilterSettings,
+            child: const LowPassFilterExpansionPanelList(),
+          ),
+          ChangeNotifierProvider.value(
+            value: _settings.highPassFilterSettings,
+            child: const HighPassFilterExpansionPanelList(),
+          ),
+        ]),
+        // Place play button in the top right corner
+        floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+        floatingActionButton: PlayButtonStatelessWidget(
+          conf: _conf,
         ),
-        ChangeNotifierProvider.value(
-          value: _settings.frequencySettings,
-          child: const FrequencyExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.vibratoSettings,
-          child: const VibratoExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.arpeggiationSettings,
-          child: const ArpeggiationExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.dutyCycleSettings,
-          child: const DutyCycleExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.retriggerSettings,
-          child: const RetriggerExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.flangerSettings,
-          child: const FlangerExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.lowPassFilterSettings,
-          child: const LowPassFilterExpansionPanelList(),
-        ),
-        ChangeNotifierProvider.value(
-          value: _settings.highPassFilterSettings,
-          child: const HighPassFilterExpansionPanelList(),
-        ),
-      ]),
-      // Place play button in the top right corner
-      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: PlayButtonStatelessWidget(
-        conf: _conf,
       ),
     );
   }
