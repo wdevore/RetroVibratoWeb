@@ -17,7 +17,7 @@ class PlayButtonStatelessWidget extends StatelessWidget {
       margin: const EdgeInsets.only(top: kToolbarHeight),
       child: FloatingActionButton(
         onPressed: () {
-          conf.play();
+          conf.aplay();
         },
         tooltip: 'Play sound',
         backgroundColor: Colors.lime,

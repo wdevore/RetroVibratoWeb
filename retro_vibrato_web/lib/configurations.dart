@@ -30,7 +30,6 @@ class Configurations {
   }
 
   void config() {
-    // ga.initForRepeat(settings);
     ga.init(settings);
   }
 
@@ -51,6 +50,12 @@ class Configurations {
 
     // Stream it
     _audioStream.push(wave);
+  }
+
+  Future<void> aplay() async {
+    Future.delayed(const Duration(milliseconds: 1), () {
+      play();
+    });
   }
 
   // --------------------------------------------------------

@@ -72,6 +72,7 @@ class SettingsSlider extends StatelessWidget {
                   onChanged: (value) {
                     field.value = value;
                   },
+                  onChangeEnd: (value) => debugPrint("rel"),
                 ),
               ),
             ),

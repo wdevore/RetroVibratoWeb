@@ -64,7 +64,7 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Add SampleSize 
 - ☑ Saving wave file via download
 - ☑ Porting generator algorithm from Ranger-Go-IGE
-- ☒ Implement play button
+- ☑ Implement play button
 - ☒ Add Help popup
 - ☒ Add exception handling
 
