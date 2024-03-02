@@ -224,10 +224,10 @@ class FSfxrHomePage extends StatelessWidget {
               ],
               child: const SettingsSampleSizeSubPanel(),
             ),
-            ChangeNotifierProvider.value(
-              value: _settings.appSettings.autoplay,
-              child: const SettingsAutoplayCheck(),
-            ),
+            // ChangeNotifierProvider.value(
+            //   value: _settings.appSettings.autoplay,
+            //   child: const SettingsAutoplayCheck(),
+            // ),
             Container(
               decoration: BoxDecoration(color: Colors.lime.shade400),
               child: ListTile(
@@ -240,7 +240,9 @@ class FSfxrHomePage extends StatelessWidget {
                 onTap: () {
                   // Show dialog
                   // Then close the drawer
-                  Navigator.pop(context);
+                  // Navigator.pop(context);
+                  showAboutDialog(
+                      context: context, applicationVersion: '1.0.0');
                 },
               ),
             ),

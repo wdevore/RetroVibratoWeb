@@ -51,8 +51,6 @@ The fix for Random would be to check what the range is and use that instead of h
 - About
 
 # Tasks
-*Left off at ...*
-
 - ☑ Settings sliders
 - ☑ State management. Used Provider
 - ☑ Load json and updating GUI
@@ -65,8 +63,9 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Saving wave file via download
 - ☑ Porting generator algorithm from Ranger-Go-IGE
 - ☑ Implement play button
-- ☒ Add Help popup
-- ☒ Add exception handling
+- ☑ Add Help popup
+- ☑ Complete Auto play (optiona, on by default)
+- ☒ Add exception handling (optional)
 
 # Audio
 mime types:

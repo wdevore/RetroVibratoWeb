@@ -41,6 +41,7 @@ class SettingsSlider extends StatelessWidget {
                     ),
                     onPressed: () {
                       field.value = field.rValue;
+                      configWidget.config.aplay();
                     },
                   ),
                 ),
