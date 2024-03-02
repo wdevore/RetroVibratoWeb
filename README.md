@@ -7,6 +7,10 @@ Rev 2
 
 ![RetroVibratoWeb_P2 gif](retrovibratoweb_p2.gif)
 
+![RetroVibrato_Drawer_panel png](RetroVibrato_Drawer_panel.png)
+
+![RetroVibrato_Settings png](RetroVibrato_Settings.png)
+
 
 # Projection creation
 ```sh
@@ -38,16 +42,13 @@ The fix for Random would be to check what the range is and use that instead of h
 - Load
     - sfxr
 - Sample Rate
-    - 44 KHz
+    - 44 KHz (default)
     - 22 KHz
     - 11 KHz
     - 5.5 KHz
-- Autoplay checkbox
-- Email
-    - Email address
-    - Type
-        - sfxr
-        - wave
+- Sample Size
+    - 16 bits
+    - 8 bits (default)
 - About
 
 # Tasks
@@ -65,6 +66,8 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☑ Implement play button
 - ☑ Add Help popup
 - ☑ Complete Auto play (optiona, on by default)
+- ☒ Implement 22KHz, 11KHz,5.5KHz sample rate options
+- ☒ Implement 16 bit sample size option
 - ☒ Add exception handling (optional)
 
 # Audio
