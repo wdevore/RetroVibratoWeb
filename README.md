@@ -70,6 +70,9 @@ The fix for Random would be to check what the range is and use that instead of h
 - ☒ Implement 16 bit sample size option
 - ☒ Add exception handling (optional)
 
+- ☑
+- ☒
+
 # Audio
 mime types:
 - https://github.com/higuma/web-audio-recorder-js
